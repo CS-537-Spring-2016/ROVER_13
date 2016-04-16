@@ -1,6 +1,6 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
-applu plugin: 'eclipse'
+apply plugin: 'eclipse'
 
 sourceCompatibility = 1.8
 version = '1.0'
@@ -30,5 +30,10 @@ test {
 
 task rover(type: JavaExec){
   classpath = sourceSets.main.runtimeClasspath
-  main = 'swarmBots.Rover'
+  main = 'bot.Rover'
+}
+
+task server(type: JavaExec){
+  classpath = sourceSets.main.runtimeClasspath
+  main = 'controlServer.SwarmServer'
 }
