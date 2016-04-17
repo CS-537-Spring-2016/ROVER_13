@@ -16,6 +16,8 @@
 !libs/*/
 !libs/*/*
 
+
 !*.txt
+!*.md
 
 !build.gradle
