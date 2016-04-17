@@ -42,6 +42,11 @@ task rover(type: JavaExec){
   main = 'bot.Rover'
 }
 
+task sampleRover(type: JavaExec){
+  classpath = sourceSets.main.runtimeClasspath
+  main = 'swarmBots.ROVER_00'
+}
+
 task server(type: JavaExec){
   classpath = sourceSets.main.runtimeClasspath
   main = 'controlServer.SwarmServer'

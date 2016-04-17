@@ -10,8 +10,8 @@ import java.net.UnknownHostException;
 public class Rover {
 
   private String roverName;
-  private final String SERVER_ADDRESS;
-  private final int SERVER_PORT;
+  private String SERVER_ADDRESS;
+  private int SERVER_PORT;
   private int sleepTime;
 
   private BufferedReader in;
@@ -21,15 +21,17 @@ public class Rover {
     roverName = "ROVER_13";
     SERVER_ADDRESS = "localhost";
     SERVER_PORT = 9537;
-    sleepTime = 200;
+    sleepTime = 300;
   }
 
   private void run(){
-    try(Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)){
+    try{
+      Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       out = new PrintWriter(socket.getOutputStream(), true);
     } catch(UnknownHostException unHostEx){
       System.err.printf("unable to connect to socket %s%n", unHostEx);
+      unHostEx.printStackTrace();
       return;
     } catch(IOException ioEx){
       System.err.printf("IO exception while creating socket %s%n", ioEx);
@@ -64,5 +66,7 @@ public class Rover {
 
   public static void main(String[] args){
     System.out.printf("%s%n", "Hello World from Rover13");
+    Rover rover = new Rover();
+    rover.run();
   }
 }
