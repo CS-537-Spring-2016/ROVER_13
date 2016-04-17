@@ -26,14 +26,14 @@ public class Rover {
 
   private void run(){
     try(Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)){
-
+      in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      out = new PrintWriter(socket.getOutputStream(), true);
     } catch(UnknownHostException unHostEx){
       System.err.printf("unable to connect to socket %s%n", unHostEx);
     } catch(IOException ioEx){
       System.err.printf("IO exception while creating socket %s%n", ioEx);
     }
-    // in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-    // out = new PrintWriter(socket.getOutputStream(), true);
+
   }
 
 
