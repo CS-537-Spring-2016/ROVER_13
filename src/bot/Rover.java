@@ -43,6 +43,11 @@ public class Rover {
       return;
     }
 
+    // rover is alive and communication
+    while(true){
+      // TODO do interesting rover things
+    }
+
   }
 
   private void serverHandshake() throws IOException{
