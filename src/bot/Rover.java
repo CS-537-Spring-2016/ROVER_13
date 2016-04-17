@@ -48,6 +48,11 @@ public class Rover {
     // rover is alive and communication
     while(true){
       // TODO do interesting rover things
+      //getLocation();
+      //getScan();
+      /*
+      logic for MOVE, GATHER
+      */
     }
 
   }
