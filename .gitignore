@@ -9,13 +9,14 @@
 !src/*
 !src/*/
 !src/*/*
+!src/**
 
 !libs
 !libs/
 !libs/*
 !libs/*/
 !libs/*/*
-
+!libs/**
 
 !*.txt
 !*.md
