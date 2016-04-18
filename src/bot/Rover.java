@@ -63,8 +63,25 @@ public class Rover {
 
   private void move(){
     // TODO
-    //
-    // out.println("MOVE " + direction);
+    // decide what direction to move in
+    // Direction direction = decideNextMove()
+    // out.println("MOVE " + direction.getAbbrev());
+  }
+
+  private boolean scan(){
+    // TODO
+    out.println("SCAN");
+    String response;
+    try{
+      response = in.readLine();
+      // parse the response into an object
+      // use the object to build a new map/graph
+      return true;
+    } catch(IOException ex){
+      System.err.println("exception reading outputstream during scan " + ex);
+      return false;
+    }
+
   }
 
   private void serverHandshake() throws IOException{
