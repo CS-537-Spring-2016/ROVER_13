@@ -18,8 +18,12 @@ public class Rover {
   private PrintWriter out;
 
   public Rover() {
+    this("localhost");
+  }
+
+  public Rover(String serverAddress) {
     roverName = "ROVER_13";
-    SERVER_ADDRESS = "localhost";
+    SERVER_ADDRESS = serverAddress;
     SERVER_PORT = 9537;
     sleepTime = 300;
   }
