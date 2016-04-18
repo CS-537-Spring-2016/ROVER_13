@@ -61,6 +61,12 @@ public class Rover {
 
   }
 
+  private void move(){
+    // TODO
+    //
+    // out.println("MOVE " + direction);
+  }
+
   private void serverHandshake() throws IOException{
     String line;
     while(true){
