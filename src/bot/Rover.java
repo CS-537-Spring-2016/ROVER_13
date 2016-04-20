@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class Rover {
 
-  // communication 
+  // communication related
   private static final Logger logger = Logger.getLogger(Rover.class.getName());
   private String roverName;
   private String SERVER_ADDRESS;
