@@ -36,7 +36,8 @@ public class Rover {
     roverName = "ROVER_13";
     SERVER_ADDRESS = serverAddress;
     SERVER_PORT = 9537;
-    sleepTime = 300;
+    // FIXME: implement class to cover the sleep time
+    sleepTime = 1200;
     strategy = new RandomStrategy();
   }
 
