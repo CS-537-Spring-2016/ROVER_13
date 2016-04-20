@@ -1,14 +1,22 @@
 package bot;
 
+import bot.movement.Direction;
+import bot.movement.RandomStrategy;
+import bot.movement.Strategy;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Rover {
 
+  // communication related
+  private static final Logger logger = Logger.getLogger(Rover.class.getName());
   private String roverName;
   private String SERVER_ADDRESS;
   private int SERVER_PORT;
@@ -16,6 +24,9 @@ public class Rover {
 
   private BufferedReader in;
   private PrintWriter out;
+
+  // knowledge
+  private Strategy strategy;
 
   public Rover() {
     this("localhost");
@@ -26,6 +37,7 @@ public class Rover {
     SERVER_ADDRESS = serverAddress;
     SERVER_PORT = 9537;
     sleepTime = 300;
+    strategy = new RandomStrategy();
   }
 
   private void run(){
@@ -50,6 +62,7 @@ public class Rover {
     }
 
     // rover is alive and communication
+    logger.log(Level.INFO, "rover_13 is up");
     while(true){
       // TODO do interesting rover things
       //getLocation();
@@ -57,15 +70,29 @@ public class Rover {
       /*
       logic for MOVE, GATHER
       */
+      waitUntilReady();
+      makeBestMove();
     }
 
   }
 
-  private void move(){
-    // TODO
+  private void waitUntilReady(){
+    try{
+      Thread.sleep(sleepTime);
+    } catch(InterruptedException ex){
+      ex.printStackTrace();
+    }
+  }
+
+  private void makeBestMove(){
     // decide what direction to move in
-    // Direction direction = decideNextMove()
-    // out.println("MOVE " + direction.getAbbrev());
+    Direction direction = strategy.bestMove();
+    move(direction);
+  }
+
+  private void move(Direction direction){
+    logger.info("moving direction: " + direction);
+     out.println("MOVE " + direction.getAbbrev());
   }
 
   private boolean scan(){
@@ -97,7 +124,7 @@ public class Rover {
 
 
   public static void main(String[] args){
-    System.out.printf("%s%n", "Hello World from Rover13");
+    Rover.logger.setLevel(Level.ALL);
     Rover rover = new Rover();
     rover.run();
   }
