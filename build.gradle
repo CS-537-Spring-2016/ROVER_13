@@ -39,7 +39,7 @@ test {
 
 task rover(type: JavaExec){
   classpath = sourceSets.main.runtimeClasspath
-  main = 'bot.Rover'
+  main = 'swarmBots.ROVER_13'
 }
 
 task sampleRover(type: JavaExec){

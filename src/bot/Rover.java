@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class Rover {
 
   // communication related
-  private static final Logger logger = Logger.getLogger(Rover.class.getName());
+  public static final Logger logger = Logger.getLogger(Rover.class.getName());
   private String roverName;
   private String SERVER_ADDRESS;
   private int SERVER_PORT;
@@ -41,7 +41,7 @@ public class Rover {
     strategy = new RandomStrategy();
   }
 
-  private void run(){
+  public void run(){
     try{
       Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -123,10 +123,10 @@ public class Rover {
     }
   }
 
-
-  public static void main(String[] args){
-    Rover.logger.setLevel(Level.ALL);
-    Rover rover = new Rover();
-    rover.run();
-  }
+  //
+  // public static void main(String[] args){
+  //   Rover.logger.setLevel(Level.ALL);
+  //   Rover rover = new Rover();
+  //   rover.run();
+  // }
 }
