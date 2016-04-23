@@ -67,7 +67,7 @@ public class Rover {
     while(true){
       // TODO do interesting rover things
       //getLocation();
-      //getScan();
+      scan();
       /*
       logic for MOVE, GATHER
       */
@@ -99,9 +99,20 @@ public class Rover {
   private boolean scan(){
     // TODO
     out.println("SCAN");
-    String response;
+    String response = "";
     try{
-      response = in.readLine();
+      String scanStart = in.readLine();
+      if(scanStart.equals("SCAN")){
+        StringBuilder sb = new StringBuilder();
+        String nextLine = in.readLine();
+        while(!nextLine.equals("SCAN_END")){
+          sb.append(nextLine);
+          nextLine = in.readLine();
+        }
+        response = sb.toString();
+        // TODO
+        // send response to map builder
+      }
       // parse the response into an object
       // use the object to build a new map/graph
       return true;
@@ -122,11 +133,4 @@ public class Rover {
       }
     }
   }
-
-  //
-  // public static void main(String[] args){
-  //   Rover.logger.setLevel(Level.ALL);
-  //   Rover rover = new Rover();
-  //   rover.run();
-  // }
 }
