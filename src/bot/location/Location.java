@@ -1,5 +1,5 @@
 package bot;
-
+//creating location class
 public class Location_Command {
 
 private int x;
