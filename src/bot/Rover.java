@@ -13,11 +13,10 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Rover 
-{
+public class Rover {
 
   // communication related
-  private static final Logger logger = Logger.getLogger(Rover.class.getName());
+  public static final Logger logger = Logger.getLogger(Rover.class.getName());
   private String roverName;
   private String SERVER_ADDRESS;
   private int SERVER_PORT;
@@ -29,13 +28,11 @@ public class Rover
   // knowledge
   private Strategy strategy;
 
-  public Rover()
-  {
+  public Rover() {
     this("localhost");
   }
 
-  public Rover(String serverAddress) 
-  {
+  public Rover(String serverAddress) {
     roverName = "ROVER_13";
     SERVER_ADDRESS = serverAddress;
     SERVER_PORT = 9537;
@@ -44,43 +41,33 @@ public class Rover
     strategy = new RandomStrategy();
   }
 
-  private void run()
-  {
-    try
-    {
+  public void run(){
+    try{
       Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       out = new PrintWriter(socket.getOutputStream(), true);
-    } 
-    catch(UnknownHostException unHostEx)
-    {
+    } catch(UnknownHostException unHostEx){
       System.err.printf("unable to connect to socket %s%n", unHostEx);
       unHostEx.printStackTrace();
       return;
-    } 
-    catch(IOException ioEx)
-    {
+    } catch(IOException ioEx){
       System.err.printf("IO exception while creating socket %s%n", ioEx);
       return;
     }
 
-    try
-    {
+    try{
       serverHandshake();
-    }
-    catch(IOException ex)
-    {
+    } catch(IOException ex){
       System.err.printf("unable to establish handshake with server: %s%n", ex);
       return;
     }
 
     // rover is alive and communication
     logger.log(Level.INFO, "rover_13 is up");
-    while(true)
-    {
+    while(true){
       // TODO do interesting rover things
       //getLocation();
-      //getScan();
+      scan();
       /*
       logic for MOVE, GATHER
       */
@@ -90,70 +77,60 @@ public class Rover
 
   }
 
-  private void waitUntilReady()
-  {
-    try
-    {
+  private void waitUntilReady(){
+    try{
       Thread.sleep(sleepTime);
-    } 
-    catch(InterruptedException ex)
-    {
+    } catch(InterruptedException ex){
       ex.printStackTrace();
     }
   }
 
-  private void makeBestMove()
-  {
+  private void makeBestMove(){
     // decide what direction to move in
     Direction direction = strategy.bestMove();
     move(direction);
   }
 
-  private void move(Direction direction)
-  {
+  private void move(Direction direction){
     logger.info("moving direction: " + direction);
      out.println("MOVE " + direction.getAbbrev());
   }
 
-  private boolean scan()
-  {
+  private boolean scan(){
     // TODO
     out.println("SCAN");
-    String response;
-    try
-    {
-      response = in.readLine();
+    String response = "";
+    try{
+      String scanStart = in.readLine();
+      if(scanStart.equals("SCAN")){
+        StringBuilder sb = new StringBuilder();
+        String nextLine = in.readLine();
+        while(!nextLine.equals("SCAN_END")){
+          sb.append(nextLine);
+          nextLine = in.readLine();
+        }
+        response = sb.toString();
+        // TODO
+        // send response to map builder
+      }
       // parse the response into an object
       // use the object to build a new map/graph
       return true;
-    } 
-    catch(IOException ex)
-    {
+    } catch(IOException ex){
       System.err.println("exception reading outputstream during scan " + ex);
       return false;
     }
 
   }
 
-  private void serverHandshake() throws IOException
-  {
+  private void serverHandshake() throws IOException{
     String line;
-    while(true)
-    {
+    while(true){
       line = in.readLine();
-      if (line.startsWith("SUBMITNAME")) 
-        {
+      if (line.startsWith("SUBMITNAME")) {
         out.println(roverName); // This sets the name of this instance of a swarmBot
         return;
-        }
+      }
     }
-  }
-
-
-  public static void main(String[] args)
-  {
-    Rover.logger.setLevel(Level.ALL);
-    Rover rover = new Rover();
-    rover.run();
   }
 }

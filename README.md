@@ -3,7 +3,7 @@
 # Running
 entry class is bot.Rover
 ```
-java -cp ../relevant-jar.jar:../libs/* bot.rover
+java -cp ../relevant-jar.jar:../libs/* swarmBots.ROVER_13
 ```
 
 ## TODO

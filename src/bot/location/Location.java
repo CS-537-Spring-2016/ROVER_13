@@ -1,24 +1,20 @@
-package bot;
+package bot.location;
 //creating location command
 
-public class Location_Command {
+public class Location {
 
 private int x;
 private int y;
-Location_Command(int x,int y)
-{
-    this.x=x;
-    this.y=y;
+  public  Location(int x,int y) {
+      this.x=x;
+      this.y=y;
+  }
 
-}
-
-public int getx()
-{
-   return x;
-}
-public int gety()
-{
-      return y;
-}
+  public int getX() {
+     return x;
+  }
+  public int getY() {
+        return y;
+  }
 
 }
