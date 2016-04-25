@@ -127,7 +127,7 @@ public class Node implements Comparable<Node>{
     isOccupied = occupied;
   }
 
-  private void prepareForSearch(){
+  public void prepareForSearch(){
     this.parent = null;
     this.destination = null;
     this.shortestDistance = Integer.MAX_VALUE;

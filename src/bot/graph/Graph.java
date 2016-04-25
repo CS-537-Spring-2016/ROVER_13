@@ -77,4 +77,13 @@ public class Graph {
   public boolean contains(Node key){
     return adjList.containsKey(key);
   }
+
+  public void prepareSearcableNodes(){
+    for(Map.Entry<Node, List<Node>> entry : adjList.entrySet()){
+      for(Node node : entry.getValue()){
+        node.prepareForSearch();
+      }
+      entry.getKey().prepareForSearch();
+    }
+  }
 }
