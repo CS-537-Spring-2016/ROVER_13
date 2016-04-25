@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class ROVER_13 {
   public static void main(String[] args){
     Rover.logger.setLevel(Level.ALL);
-    Rover rover = new Rover();
+    Rover rover = (args.length == 1) ? new Rover(args[0]) : new Rover();
     rover.run();
   }
 }
