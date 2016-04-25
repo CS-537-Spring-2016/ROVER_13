@@ -78,6 +78,11 @@ public class Node implements Comparable<Node>{
     return result;
   }
 
+  @Override
+  public String toString(){
+    return String.format("{x:%d, y:%d, terrain:%s, science:%s, occupied:%b}", x, y, terrain, science, isOccupied);
+  }
+
   public int getX(){
     return x;
   }
