@@ -7,11 +7,15 @@ import enums.Terrain;
  * Created by tj on 4/23/16.
  */
 public class Node implements Comparable<Node>{
+
   private int x;
   private int y;
   private Terrain terrain;
   private Science science;
   private boolean isOccupied;
+  private Node parent;
+  private Node destination;
+  private int shortestDistance;
 
   public Node(){
 
@@ -121,5 +125,35 @@ public class Node implements Comparable<Node>{
 
   public void setOccupied(boolean occupied) {
     isOccupied = occupied;
+  }
+
+  private void prepareForSearch(){
+    this.parent = null;
+    this.destination = null;
+    this.shortestDistance = Integer.MAX_VALUE;
+  }
+
+  public Node getParent() {
+    return parent;
+  }
+
+  public void setParent(Node parent) {
+    this.parent = parent;
+  }
+
+  public Node getDestination() {
+    return destination;
+  }
+
+  public void setDestination(Node destination) {
+    this.destination = destination;
+  }
+
+  public int getShortestDistance() {
+    return shortestDistance;
+  }
+
+  public void setShortestDistance(int shortestDistance) {
+    this.shortestDistance = shortestDistance;
   }
 }
