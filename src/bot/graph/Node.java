@@ -49,8 +49,33 @@ public class Node implements Comparable<Node>{
     return 0;
   }
 
+  @Override
   public int compareTo(Node otherNode){
+    // FIXME:
     return 0;
+  }
+
+  @Override
+  public boolean equals(Object other){
+    if(this == otherNode) return true;
+    if(!(otherNode instanceof Node)) return false;
+    Node otherNode = (Node) other;
+    return x == otherNode.getX() &&
+            y == otherNode.getY() &&
+            terrain == otherNode.getTerrain() &&
+            science == otherNode.getScience() &&
+            isOccupied == otherNode.isOccupied();
+  }
+
+  @Override
+  public int hashCode(){
+    int result = 17;
+    result = 31 * result + x;
+    result = 31 * result + y;
+    result = 31 * result + terrain.hashCode();
+    result = 31 * result + science.hashCode();
+    result = 31 * result + (isOccupied ? 1 : 0);
+    return result;
   }
 
   public int getX(){
