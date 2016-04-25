@@ -27,6 +27,9 @@ public class Node implements Comparable<Node>{
     this.terrain = terrain;
     this.science = science;
     this.isOccupied = isOccupied;
+    this.parent = null;
+    this.destination = null;
+    this.shortestDistance = Integer.MAX_VALUE;
   }
 
   public Node(Node copy){
@@ -35,6 +38,9 @@ public class Node implements Comparable<Node>{
     this.terrain = copy.getTerrain();
     this.science = copy.getScience();
     this.isOccupied = copy.isOccupied();
+    this.parent = copy.getParent();
+    this.destination = copy.getDestination();
+    this.shortestDistance = copy.getShortestDistance();
   }
 
   public double h(){

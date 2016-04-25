@@ -18,6 +18,14 @@ public class Graph {
 
   public Graph(Graph copy){
     // use the contents of copy to create a new graph
+    adjList = new HashMap<>();
+    for(Map.Entry<Node, List<Node>> entry : copy.adjList.entrySet()){
+      Node node = new Node(entry.getKey());
+      addNode(node);
+      for(Node adjacent : entry.getValue()){
+        addEdge(node, new Node(adjacent));
+      }
+    }
   }
 
   // returns all the nodes that have an edge to node
