@@ -10,13 +10,11 @@ public class RandomStrategy implements Strategy
 
   private Random rng;
 
-  public RandomStrategy()
-  {
+  public RandomStrategy() {
     rng = new Random();
   }
 
-  public Direction bestMove()
-  {
+  public Direction bestMove() {
     Direction[] directions = Direction.values();
     int choice = rng.nextInt(directions.length);
     return directions[choice];
