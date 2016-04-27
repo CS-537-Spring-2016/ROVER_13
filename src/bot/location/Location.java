@@ -1,5 +1,5 @@
 package bot.location;
-//creating location command
+
 
 public class Location {
 
