@@ -68,6 +68,7 @@ public class Rover {
       // TODO do interesting rover things
       //getLocation();
       scan();
+      gather();// because, why not?
       /*
       logic for MOVE, GATHER
       */
@@ -94,6 +95,14 @@ public class Rover {
   private void move(Direction direction){
     logger.info("moving direction: " + direction);
      out.println("MOVE " + direction.getAbbrev());
+  }
+
+  private boolean gather(){
+    logger.info("attempting to gather");
+    out.println("GATHER");
+    // FIXME we can perform a check by issuing an equipment call to determine success
+    // default to false for now
+    return false;
   }
 
   private boolean scan(){
