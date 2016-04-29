@@ -4,27 +4,52 @@ import enums.Science;
 import enums.Terrain;
 
 public class Cell {
-	
+
 	public int xPosition;
 	public int yPosition;
 	private Terrain terrain;
 	private Science science;
-	
-	//For occupied status we will use hasRover boolean attribute
+
+	// For occupied status we will use hasRover boolean attribute
 	private boolean hasRover;
-	
-	//default constructor
-	public Cell(){
-		terrain=Terrain.SOIL;
+
+	// default constructor
+	public Cell() {
+		terrain = Terrain.SOIL;
 		science = Science.NONE;
-		hasRover=false;
+		hasRover = false;
 	}
-	
-	//Constructor for setting Terrain, science and occupied position
-	public Cell(Terrain terrain, Science science, boolean hasRover ){
+
+	// Constructor for setting Terrain, science and occupied position
+	public Cell(Terrain terrain, Science science, boolean hasRover) {
 		this.terrain = terrain;
-		this.science=science;
-		this.hasRover=hasRover;
+		this.science = science;
+		this.hasRover = hasRover;
 	}
+	// getters
+	// we will not create any setters for security reasons. Attributes can be
+	// set using construcors if needed
+	public int getxPosition() {
+		return xPosition;
+	}
+
+	public int getyPosition() {
+		return yPosition;
+	}
+
+	public Terrain getTerrain() {
+		return terrain;
+	}
+
+	public Science getScience() {
+		return science;
+	}
+
+	public boolean isHasRover() {
+		return hasRover;
+	}
+
+
+	
 
 }
