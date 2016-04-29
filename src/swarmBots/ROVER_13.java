@@ -174,7 +174,7 @@ public class ROVER_13 {
 					//System.out.println("ROVER_13 scanMapTiles[2][1].getHasRover() " + scanMapTiles[2][1].getHasRover());
 					//System.out.println("ROVER_13 scanMapTiles[2][1].getTerrain() " + scanMapTiles[2][1].getTerrain().toString());
 					
-					if (scanMapTiles[centerIndex][centerIndex -1].getHasRover() 
+					if (scanMapTiles[centerIndex][centerIndex -1].getHasRover() //NORTH
 							|| scanMapTiles[centerIndex][centerIndex -1].getTerrain() == Terrain.ROCK
 							|| scanMapTiles[centerIndex][centerIndex -1].getTerrain() == Terrain.NONE) {
 						blocked = true;
