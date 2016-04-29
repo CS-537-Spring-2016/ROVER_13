@@ -12,6 +12,12 @@ public class Cell {
 
 	// For occupied status we will use hasRover boolean attribute
 	private boolean hasRover;
+	
+	//constructor for setting x and y position
+	public Cell(int x, int y){
+		this.xPosition=x;
+		this.yPosition=y;
+	}
 
 	// default constructor
 	public Cell() {
