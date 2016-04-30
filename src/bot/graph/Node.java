@@ -43,20 +43,22 @@ public class Node implements Comparable<Node>{
     this.shortestDistance = copy.getShortestDistance();
   }
 
-  public double h(){
+  public double h(Node destination){
+    int toX = destination.getX();
+    int toY = destination.getY();
+    return Math.sqrt(Math.pow(this.x - toX, 2) + Math.pow(this.y - toY, 2));
     // TODO heuristic
-    return 0;
   }
 
-  public double g(){
+  public int g(){
     // TODO actual distance
-    return 0;
+    return this.shortestDistance;
 
   }
 
-  public int f(){
+  public double f(){
     // TODO sum of g and h
-    return 0;
+    return h(destination) + g();
   }
 
   @Override
@@ -133,9 +135,9 @@ public class Node implements Comparable<Node>{
     isOccupied = occupied;
   }
 
-  public void prepareForSearch(){
+  public void prepareForSearch(Node dest){
     this.parent = null;
-    this.destination = null;
+    this.destination = dest;
     this.shortestDistance = Integer.MAX_VALUE;
   }
 
