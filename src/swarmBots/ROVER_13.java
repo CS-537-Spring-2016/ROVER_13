@@ -1,6 +1,5 @@
 package swarmBots;
-
-<<<<<<< HEAD
+/*
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,11 +18,11 @@ import common.MapTile;
 import common.ScanMap;
 import enums.Terrain;
 
-/**
+*//**
  * The seed that this program is built on is a chat program example found here:
  * http://cs.lmu.edu/~ray/notes/javanetexamples/ Many thanks to the authors for
  * publishing their code examples
- */
+ *//*
 
 public class ROVER_13 {
 
@@ -52,9 +51,9 @@ public class ROVER_13 {
 		sleepTime = 200; // in milliseconds - smaller is faster, but the server will cut connection if it is too small
 	}
 
-	/**
+	*//**
 	 * Connects to the server then enters the processing loop.
-	 */
+	 *//*
 	private void run() throws IOException, InterruptedException {
 
 		// Make connection and initialize streams
@@ -321,15 +320,15 @@ public class ROVER_13 {
 	
 	
 
-	/**
+	*//**
 	 * Runs the client
-	 */
+	 *//*
 	public static void main(String[] args) throws Exception {
 		ROVER_13 client = new ROVER_13();
 		client.run();
 	}
 }
-=======
+=======*/
 import bot.Rover;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -341,4 +340,3 @@ public class ROVER_13 {
     rover.run();
   }
 }
->>>>>>> 35f510ddb94761e71a741a69b2d6fd4416564786
