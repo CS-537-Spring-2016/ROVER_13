@@ -1,0 +1,66 @@
+// Apply the java plugin to add support for Java
+plugins {
+  id "java"
+  id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src/'
+    }
+  }
+}
+
+
+repositories {
+    jcenter()
+}
+
+jar {
+  manifest {
+     attributes 'Main-Class': 'swarmBots.ROVER_13'
+  }
+  // from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+shadowJar {
+    baseName = 'ROVER_13'
+    version = '1.0-SNAPSHOT'
+    archiveName = "${baseName}.jar"
+}
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+    // The production code uses the SLF4J logging API at compile time
+    compile 'org.slf4j:slf4j-api:1.7.18'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'org.bitbucket.cowwoc:guava-jdk8:1.1'
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    testCompile 'junit:junit:4.12'
+}
+
+test {
+  testLogging.showStandardStreams = true
+}
+
+task rover(type: JavaExec){
+  classpath = sourceSets.main.runtimeClasspath
+  main = 'swarmBots.ROVER_13'
+}
+
+task sampleRover(type: JavaExec){
+  classpath = sourceSets.main.runtimeClasspath
+  main = 'swarmBots.ROVER_00'
+}
+
+task server(type: JavaExec){
+  classpath = sourceSets.main.runtimeClasspath
+  main = 'controlServer.SwarmServer'
+}

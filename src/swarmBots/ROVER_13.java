@@ -1,5 +1,6 @@
 package swarmBots;
 
+<<<<<<< HEAD
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -328,3 +329,16 @@ public class ROVER_13 {
 		client.run();
 	}
 }
+=======
+import bot.Rover;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class ROVER_13 {
+  public static void main(String[] args){
+    Rover.logger.setLevel(Level.ALL);
+    Rover rover = (args.length == 1) ? new Rover(args[0]) : new Rover();
+    rover.run();
+  }
+}
+>>>>>>> 35f510ddb94761e71a741a69b2d6fd4416564786
