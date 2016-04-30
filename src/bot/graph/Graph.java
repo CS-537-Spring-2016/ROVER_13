@@ -72,6 +72,12 @@ public class Graph {
     return !edges.contains(to) ? edges.add(to) : false;
   }
 
+  public boolean addTwoWayEdge(Node first, Node second){
+    boolean success = addEdge(first, second);
+    success = addEdge(second, first) && success;
+    return success;
+  }
+
   // removes an edge from 1st node to 2nd node
   public boolean removeEdge(Node from, Node to){
     return adjList.containsKey(from) ? adjList.get(from).remove(to) : false;
