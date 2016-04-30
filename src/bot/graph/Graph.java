@@ -94,4 +94,13 @@ public class Graph {
       entry.getKey().prepareForSearch();
     }
   }
+
+  public void setAllDestination(Node dest){
+    for(Map.Entry<Node, List<Node>> entry : adjList.entrySet()){
+      Node key = entry.getKey().setAllDestination(dest);
+      for(Node node : entry.getValue()){
+        node.setDestination(dest);
+      }
+    }
+  }
 }
