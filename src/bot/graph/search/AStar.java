@@ -49,7 +49,9 @@ public class AStar {
   }
 
   public List<Node> search(Graph graph, Node source, Node dest) {
-//    return execute(new Graph(graph), new Node(source), new Node(dest));
+    if(source.equals(dest)){
+      return new ArrayList<>();
+    }
     map = new HashMap<>();
     for(Node node : graph.getNodes()){
       map.put(node, new NodeMeta(node, node.getX(), node.getY()));
@@ -62,10 +64,8 @@ public class AStar {
   }
 
   public int minDistance(Graph graph, Node source, Node dest){
-    // FIXME
-    List<Node> path = execute(new Graph(graph), new Node(source), new Node(dest));
-    int dist = path.size();
-    return -1;
+    List<Node> path = search(graph, source, dest);
+    return path.size();
   }
 
   public List<Node> makePath(Map<Node, NodeMeta> map, Graph graph, Node source, Node dest){
