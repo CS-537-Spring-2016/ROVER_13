@@ -17,8 +17,15 @@ public class Node implements Comparable<Node>{
   private Node destination;
   private int shortestDistance;
 
-  public Node(){
-
+  public Node(int x, int y){
+    this.x = x;
+    this.y = y;
+    this.terrain = null;
+    this.science = null;
+    this.isOccupied = false;
+    this.parent = null;
+    this.destination = null;
+    this.shortestDistance = Integer.MAX_VALUE;
   }
 
   public Node(int x, int y, Terrain terrain, Science science, boolean isOccupied){
@@ -73,10 +80,7 @@ public class Node implements Comparable<Node>{
     if(!(other instanceof Node)) return false;
     Node otherNode = (Node) other;
     return x == otherNode.getX() &&
-            y == otherNode.getY() &&
-            terrain == otherNode.getTerrain() &&
-            science == otherNode.getScience() &&
-            isOccupied == otherNode.isOccupied();
+            y == otherNode.getY();
   }
 
   @Override
@@ -84,9 +88,6 @@ public class Node implements Comparable<Node>{
     int result = 17;
     result = 31 * result + x;
     result = 31 * result + y;
-    result = 31 * result + terrain.hashCode();
-    result = 31 * result + science.hashCode();
-    result = 31 * result + (isOccupied ? 1 : 0);
     return result;
   }
 

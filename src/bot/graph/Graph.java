@@ -11,9 +11,11 @@ public class Graph {
   // can reduce our memory footprint as opposed to hashset
   // contains method only has to check at most 4 nodes, O(1)
   public Map<Node, List<Node>> adjList;
+  private Map<Node, Node> nodes;
 
   public Graph(){
     this.adjList = new HashMap<>();
+    this.nodes = new HashMap<>();
   }
 
   public Graph(Graph copy){
@@ -46,6 +48,7 @@ public class Graph {
   public boolean addNode(Node node){
     if(!adjList.containsKey(node)){
       adjList.put(node, new ArrayList<>());
+      nodes.put(node, node);
       return true;
     }
     return false;
@@ -59,6 +62,7 @@ public class Graph {
       for(Map.Entry<Node, List<Node>> entry : adjList.entrySet()){
         entry.getValue().remove(node);
       }
+      nodes.remove(node);
       return adjList.remove(node) != null;
     }
     return false;
@@ -100,4 +104,9 @@ public class Graph {
       entry.getKey().prepareForSearch(dest);
     }
   }
+
+  public Node getByXY(int x, int y){
+    return nodes.get(new Node(x,y));
+  }
+
 }

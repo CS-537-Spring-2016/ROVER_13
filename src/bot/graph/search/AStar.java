@@ -11,43 +11,54 @@ import java.util.*;
 public class AStar {
   private final boolean DEBUG = false;
   public Graph graph;
+  private Map<Node, NodeMeta> map;
 
   public AStar(){
-
+    map = new HashMap<>();
   }
 
   private List<Node> execute(Graph graph, Node source, Node dest){
-    Node destination = dest;
-    graph.prepareSearcableNodes(dest);
-    Node start = source;
+    NodeMeta start = map.get(source);
     start.setShortestDistance(0);
-    Node end = dest;
+    NodeMeta end = map.get(dest);
 
-    PriorityQueue<Node> queue = new PriorityQueue<>();
+    Queue<NodeMeta> queue = new PriorityQueue<>();
     Set<Node> closed = new HashSet<>();
     queue.add(start);
     while(!queue.isEmpty() && queue.peek().f() <= end.f()){
-      Node currentMeta = queue.remove();
-      closed.add(currentMeta);
-      List<Node> neighborNodes = graph.neighbors(currentMeta);
-      List<Node> metas = neighborNodes;
+      NodeMeta currentMeta = queue.remove();
+      closed.add(currentMeta.getmNode());
+      List<Node> neighborNodes = graph.neighbors(currentMeta.getmNode());
+      List<NodeMeta> metas = new ArrayList<>();
+      neighborNodes.forEach(key -> {
+        metas.add(map.get(key));
+      });
       metas.forEach(meta -> {
         if(currentMeta.g() + 1 < meta.g()){
           // update the meta
-          meta.setParent(currentMeta);
+          meta.setParent(currentMeta.getmNode());
           meta.setShortestDistance(currentMeta.g() + 1);
-          if(!queue.contains(meta) && !closed.contains(meta)){
-              queue.add(meta);
+          final double distanceAway = meta.f();
+          if(!queue.contains(meta) && !closed.contains(meta.getmNode())){
+            queue.add(map.get(meta.getmNode()));
           }
         }
       });
     }
-    // FIXME
-    return makePath(start, end);
+    return makePath(map, graph, start.getmNode(), end.getmNode());
   }
 
   public List<Node> search(Graph graph, Node source, Node dest) {
-    return execute(new Graph(graph), new Node(source), new Node(dest));
+//    return execute(new Graph(graph), new Node(source), new Node(dest));
+    map = new HashMap<>();
+    for(Node node : graph.getNodes()){
+      map.put(node, new NodeMeta(node, node.getX(), node.getY()));
+    }
+    NodeMeta destination = map.get(dest);
+    map.keySet().forEach( key -> {
+      map.get(key).setDestination(destination);
+    });
+    return execute(graph, source, dest);
   }
 
   public int minDistance(Graph graph, Node source, Node dest){
@@ -57,14 +68,98 @@ public class AStar {
     return -1;
   }
 
-  public List<Node> makePath(Node source, Node dest){
-    List<Node> result = new ArrayList<>();
-    Node current = dest;
-    // TODO check if checking for reference is correct
-    while( current != source){
-      result.add(current);
-      current = current.getParent();
+  public List<Node> makePath(Map<Node, NodeMeta> map, Graph graph, Node source, Node dest){
+    Deque<Node> deque = new ArrayDeque<>();
+    NodeMeta current = map.get(dest);
+    while( current.getmNode() != source){
+      Node parent = current.getParent();
+      Node child = current.getmNode();
+      deque.addFirst(child);
+      current = map.get(parent);
     }
+    List<Node> result = new ArrayList<>();
+    result.addAll(deque);
     return result;
+  }
+
+  private class NodeMeta implements Comparable{
+    private final Node mNode;
+    private Node parent;
+    private NodeMeta destination;
+    private int shortestDistance;
+    private final int x;
+    private final int y;
+
+    public NodeMeta(Node mNode, int x, int y){
+      this.mNode = mNode;
+      this.parent = null;
+      this.destination = null;
+      this.shortestDistance = Integer.MAX_VALUE;
+      this.x = x;
+      this.y = y;
+    }
+
+    public Node getParent() {
+      return parent;
+    }
+
+    public void setParent(Node parent) {
+      this.parent = parent;
+    }
+
+    public int getShortestDistance() {
+      return shortestDistance;
+    }
+
+    public void setShortestDistance(int shortestDistance) {
+      this.shortestDistance = shortestDistance;
+    }
+
+    public Node getmNode() {
+      return mNode;
+    }
+
+    public int getX() {
+      return x;
+    }
+
+    public int getY() {
+      return y;
+    }
+
+    public NodeMeta getDestination() {
+      return destination;
+    }
+
+    public void setDestination(NodeMeta destination) {
+      this.destination = destination;
+    }
+
+    public double h(NodeMeta destination){
+      int toX = destination.getX();
+      int toY = destination.getY();
+      return Math.sqrt(Math.pow(this.x - toX, 2) + Math.pow(this.y - toY, 2));
+    }
+
+    public int g(){
+      return this.shortestDistance;
+    }
+
+    public double f(){
+      return h(destination) + g();
+    }
+
+    @Override
+    public int compareTo(Object other) {
+      NodeMeta otherNode = (NodeMeta)other;
+      double diff =(this.f() - otherNode.f())*10000;
+      return (int)diff;
+    }
+
+    @Override
+    public String toString(){
+      return String.valueOf(this.mNode.toString());
+    }
+
   }
 }
