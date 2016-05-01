@@ -31,8 +31,8 @@ public class Graph {
   }
 
   // returns all the nodes that have an edge to node
-  public Set<Node> neighbors(Node node){
-    return adjList.containsKey(node) ? adjList.get(node) : new HashSet<>();
+  public List<Node> neighbors(Node node){
+    return adjList.containsKey(node) ? new ArrayList<>(adjList.get(node)) : new ArrayList<>();
   }
 
   // hasEdgeTo
