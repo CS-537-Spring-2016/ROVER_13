@@ -3,6 +3,7 @@ package bot;
 import bot.graph.Graph;
 import bot.graph.Node;
 import bot.graph.search.AStar;
+import bot.location.Cell;
 import bot.location.CellMap;
 import bot.location.Location;
 import bot.movement.Direction;
@@ -18,6 +19,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -183,6 +187,38 @@ public class Rover {
         return;
       }
     }
+  }
+
+  public void addToCellMap(Collection<Cell> cells){
+    for(Cell cell : cells){
+      if(cell.getxPosition() >= 0 && cell.getyPosition() >= 0){
+        cellMap.addCell(cell);
+      }strategyg
+    }
+  }
+
+  public void updateGraph(CellMap cellMap){
+    // cells to skip: Terrain.ROCK, Terrain.NONE
+    Graph graph = new Graph();
+    for(Cell cell : cellMap.getCells()){
+      Node currentNode = cell.cellToNode();
+      if(isPassable(cell)){
+        Cell north = cellMap.getCellByCardinality(Direction.NORTH, cell);
+        Cell south = cellMap.getCellByCardinality(Direction.SOUTH, cell);
+        Cell east = cellMap.getCellByCardinality(Direction.EAST, cell);
+        Cell west = cellMap.getCellByCardinality(Direction.WEST, cell);
+        List<Cell> cellList = Arrays.asList(north, south, east, west);
+        for(Cell adjCell : cellList){
+          if(adjCell != null && isPassable(adjCell)){
+            graph.addTwoWayEdge(currentNode, adjCell.cellToNode());
+          }
+        }
+      }
+    }
+  }
+
+  private boolean isPassable(Cell cell){
+    return cell.getTerrain() != Terrain.NONE && cell.getTerrain() != Terrain.ROCK;
   }
 
   private Graph testGraph(){
