@@ -1,5 +1,6 @@
 package bot.location;
 
+import bot.graph.Node;
 import enums.Science;
 import enums.Terrain;
 
@@ -55,7 +56,9 @@ public class Cell {
     return hasRover;
   }
 
-
+  public Node cellToNode(){
+    return new Node(xPosition, yPosition, terrain, science, hasRover);
+  }
 
 
 }
