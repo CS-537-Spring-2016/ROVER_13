@@ -10,7 +10,7 @@ public class Graph {
   // each node has at most 4 edges, so using list
   // can reduce our memory footprint as opposed to hashset
   // contains method only has to check at most 4 nodes, O(1)
-  public Map<Node, List<Node>> adjList;
+  public Map<Node, Set<Node>> adjList;
   private Map<Node, Node> nodes;
 
   public Graph(){
@@ -21,7 +21,7 @@ public class Graph {
   public Graph(Graph copy){
     // use the contents of copy to create a new graph
     adjList = new HashMap<>();
-    for(Map.Entry<Node, List<Node>> entry : copy.adjList.entrySet()){
+    for(Map.Entry<Node, Set<Node>> entry : copy.adjList.entrySet()){
       Node node = new Node(entry.getKey());
       addNode(node);
       for(Node adjacent : entry.getValue()){
@@ -31,8 +31,8 @@ public class Graph {
   }
 
   // returns all the nodes that have an edge to node
-  public List<Node> neighbors(Node node){
-    return adjList.containsKey(node) ? adjList.get(node) : new ArrayList<>();
+  public Set<Node> neighbors(Node node){
+    return adjList.containsKey(node) ? adjList.get(node) : new HashSet<>();
   }
 
   // hasEdgeTo
@@ -40,14 +40,14 @@ public class Graph {
     return neighbors(from).contains(to);
   }
 
-  public Map<Node, List<Node>> getAdjacenyList(){
+  public Map<Node, Set<Node>> getAdjacenyList(){
     return adjList;
   }
 
   // add node
   public boolean addNode(Node node){
     if(!adjList.containsKey(node)){
-      adjList.put(node, new ArrayList<>());
+      adjList.put(node, new HashSet<>());
       nodes.put(node, node);
       return true;
     }
@@ -59,7 +59,7 @@ public class Graph {
     if(adjList.containsKey(node)){
       // removeEdgeFromTo
       // iterate and remove all reference to node
-      for(Map.Entry<Node, List<Node>> entry : adjList.entrySet()){
+      for(Map.Entry<Node, Set<Node>> entry : adjList.entrySet()){
         entry.getValue().remove(node);
       }
       nodes.remove(node);
@@ -72,7 +72,7 @@ public class Graph {
   public boolean addEdge(Node from, Node to){
     addNode(from);
     addNode(to);
-    List<Node> edges = adjList.get(from);
+    Set<Node> edges = adjList.get(from);
     return !edges.contains(to) ? edges.add(to) : false;
   }
 
@@ -97,7 +97,7 @@ public class Graph {
   }
 
   public void prepareSearcableNodes(Node dest){
-    for(Map.Entry<Node, List<Node>> entry : adjList.entrySet()){
+    for(Map.Entry<Node, Set<Node>> entry : adjList.entrySet()){
       for(Node node : entry.getValue()){
         node.prepareForSearch(dest);
       }
