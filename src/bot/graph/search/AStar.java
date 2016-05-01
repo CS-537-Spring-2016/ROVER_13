@@ -49,7 +49,9 @@ public class AStar {
   }
 
   public List<Node> search(Graph graph, Node source, Node dest) {
-    if(source.equals(dest)){
+    if(source.equals(dest) ||
+            !graph.getNodes().contains(source) ||
+            !graph.getNodes().contains(dest)){
       return new ArrayList<>();
     }
     map = new HashMap<>();
