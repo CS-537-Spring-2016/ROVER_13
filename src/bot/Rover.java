@@ -193,7 +193,7 @@ public class Rover {
     for(Cell cell : cells){
       if(cell.getxPosition() >= 0 && cell.getyPosition() >= 0){
         cellMap.addCell(cell);
-      }strategyg
+      }
     }
   }
 
