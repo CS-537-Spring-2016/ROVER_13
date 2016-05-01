@@ -1,5 +1,7 @@
 package bot.location;
 
+import bot.movement.Direction;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +19,23 @@ public class CellMap {
 
   public Cell getCell(int x, int y){
     Location key = new Location(x,y);
+    return cellMap.get(key);
+  }
+
+  public Cell getCellByCardinality(Direction direction, Cell cell){
+    Location key = null;
+    if(direction == Direction.NORTH){
+      key = new Location(cell.getxPosition(), cell.getyPosition() - 1);
+    }
+    else if(direction == Direction.SOUTH){
+      key = new Location(cell.getxPosition(), cell.getyPosition() + 1);
+    }
+    else if(direction == Direction.EAST){
+      key = new Location(cell.getxPosition() + 1, cell.getyPosition());
+    }
+    else if(direction == Direction.WEST){
+      key = new Location(cell.getxPosition() - 1, cell.getyPosition());
+    }
     return cellMap.get(key);
   }
 
