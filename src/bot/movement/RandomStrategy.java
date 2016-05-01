@@ -1,5 +1,8 @@
 package bot.movement;
 
+import bot.graph.Graph;
+import bot.graph.Node;
+
 import java.util.Random;
 
 /**
@@ -17,5 +20,10 @@ public class RandomStrategy implements Strategy {
     Direction[] directions = Direction.values();
     int choice = rng.nextInt(directions.length);
     return directions[choice];
+  }
+
+  @Override
+  public Direction bestMove(Graph map, Node start, Node end) {
+    return bestMove();
   }
 }
