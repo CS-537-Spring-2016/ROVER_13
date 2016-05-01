@@ -3,6 +3,7 @@ package bot;
 import bot.graph.Graph;
 import bot.graph.Node;
 import bot.graph.search.AStar;
+import bot.location.CellMap;
 import bot.location.Location;
 import bot.movement.Direction;
 import bot.movement.RandomStrategy;
@@ -28,6 +29,7 @@ public class Rover {
   private String SERVER_ADDRESS;
   private int SERVER_PORT;
   private int sleepTime;
+  private CellMap cellMap;
   private Graph graph;
   private Location currentLocation;
 
@@ -48,7 +50,8 @@ public class Rover {
     // FIXME: implement class to cover the sleep time
     sleepTime = 1200;
     strategy = new ShortestPathStrategy();
-    testGraph();
+    cellMap = new CellMap();
+    graph = testGraph();
   }
 
   public void run(){
@@ -155,6 +158,11 @@ public class Rover {
         response = sb.toString();
         // TODO
         // send response to map builder
+        /*
+        Collection<Cell> cells = converter.convert(response);
+        addToCellMap(cells);
+        updateGraph(cellMap);
+         */
       }
       // parse the response into an object
       // use the object to build a new map/graph
@@ -177,8 +185,8 @@ public class Rover {
     }
   }
 
-  private void testGraph(){
-    graph = new Graph();
+  private Graph testGraph(){
+    Graph graph = new Graph();
 
     Node n17 = new Node(1,7, Terrain.SOIL, Science.NONE, false);
     Node n18 = new Node(1,8, Terrain.SOIL, Science.NONE, false);
@@ -202,5 +210,6 @@ public class Rover {
     graph.addTwoWayEdge(n28, n38);
     graph.addTwoWayEdge(n38, n39);
     graph.addTwoWayEdge(n29, n39);
+    return graph;
   }
 }
