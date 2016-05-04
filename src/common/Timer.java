@@ -22,5 +22,19 @@ public class Timer {
 		System.out.println("ElapsedTime: " +difference);
 		return difference;
 	}
+	
+	//getters only
+	public long getStartTime() {
+		return startTime;
+	}
+	public long getStopTime() {
+		return stopTime;
+	}
+	public long getDifference() {
+		return difference;
+	}
+	
+	
+	
 
 }
