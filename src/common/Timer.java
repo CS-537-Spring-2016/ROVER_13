@@ -15,7 +15,12 @@ public class Timer {
 	public void start(){
 		startTime = System.currentTimeMillis();
 	}
-	
-	
+	//returns the difference in milliseconds that have elapsed since last start call
+	public long stop(){
+		stopTime = System.currentTimeMillis();
+		difference = stopTime - startTime;
+		System.out.println("ElapsedTime: " +difference);
+		return difference;
+	}
 
 }
