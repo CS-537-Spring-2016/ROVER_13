@@ -5,5 +5,12 @@ package common;
  * 
  */
 public class Timer {
+	
+	//start time and endtime attributes 
+	long startTime;
+	long stopTime;
+	long difference;
+	
+	
 
 }
