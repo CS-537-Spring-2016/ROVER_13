@@ -1,8 +1,17 @@
 package bot;
 
+import bot.graph.Graph;
+import bot.graph.Node;
+import bot.graph.search.AStar;
+import bot.location.Cell;
+import bot.location.CellMap;
+import bot.location.Location;
 import bot.movement.Direction;
 import bot.movement.RandomStrategy;
+import bot.movement.ShortestPathStrategy;
 import bot.movement.Strategy;
+import enums.Science;
+import enums.Terrain;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,6 +19,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +33,9 @@ public class Rover {
   private String SERVER_ADDRESS;
   private int SERVER_PORT;
   private int sleepTime;
+  private CellMap cellMap;
+  private Graph graph;
+  private Location currentLocation;
 
   private BufferedReader in;
   private PrintWriter out;
@@ -38,7 +53,9 @@ public class Rover {
     SERVER_PORT = 9537;
     // FIXME: implement class to cover the sleep time
     sleepTime = 1200;
-    strategy = new RandomStrategy();
+    strategy = new ShortestPathStrategy();
+    cellMap = new CellMap();
+    graph = testGraph();
   }
 
   public void run(){
@@ -66,7 +83,7 @@ public class Rover {
     logger.log(Level.INFO, "rover_13 is up");
     while(true){
       // TODO do interesting rover things
-      //getLocation();
+      requestLocation();
       scan();
       gather();// because, why not?
       /*
@@ -74,6 +91,7 @@ public class Rover {
       */
       waitUntilReady();
       makeBestMove();
+      //
     }
 
   }
@@ -88,7 +106,9 @@ public class Rover {
 
   private void makeBestMove(){
     // decide what direction to move in
-    Direction direction = strategy.bestMove();
+    Direction direction = strategy.bestMove(graph,
+            new Node(currentLocation.getX(), currentLocation.getY()),
+            new Node(3,9, Terrain.SOIL, Science.NONE, false));
     move(direction);
   }
 
@@ -103,6 +123,27 @@ public class Rover {
     // FIXME we can perform a check by issuing an equipment call to determine success
     // default to false for now
     return false;
+  }
+
+  private String requestLocation(){
+    out.println("LOC");
+    String response = "";
+    try{
+      response = in.readLine();
+    } catch(IOException ex){
+      logger.severe("unable to obtain location from server");
+      ex.printStackTrace();
+    }
+    currentLocation = updateLocation(response);
+    return response;
+  }
+
+  private Location updateLocation(String response){
+    String[] tokens = response.split(" ");
+    int x = Integer.parseInt(tokens[1]);
+    int y = Integer.parseInt(tokens[2]);
+    Location loc = new Location(x,y);
+    return loc;
   }
 
   private boolean scan(){
@@ -121,6 +162,11 @@ public class Rover {
         response = sb.toString();
         // TODO
         // send response to map builder
+        /*
+        Collection<Cell> cells = converter.convert(response);
+        addToCellMap(cells);
+        updateGraph(cellMap);
+         */
       }
       // parse the response into an object
       // use the object to build a new map/graph
@@ -141,5 +187,65 @@ public class Rover {
         return;
       }
     }
+  }
+
+  public void addToCellMap(Collection<Cell> cells){
+    for(Cell cell : cells){
+      if(cell.getxPosition() >= 0 && cell.getyPosition() >= 0){
+        cellMap.addCell(cell);
+      }
+    }
+  }
+
+  public void updateGraph(CellMap cellMap){
+    // cells to skip: Terrain.ROCK, Terrain.NONE
+    Graph graph = new Graph();
+    for(Cell cell : cellMap.getCells()){
+      Node currentNode = cell.cellToNode();
+      if(isPassable(cell)){
+        Cell north = cellMap.getCellByCardinality(Direction.NORTH, cell);
+        Cell south = cellMap.getCellByCardinality(Direction.SOUTH, cell);
+        Cell east = cellMap.getCellByCardinality(Direction.EAST, cell);
+        Cell west = cellMap.getCellByCardinality(Direction.WEST, cell);
+        List<Cell> cellList = Arrays.asList(north, south, east, west);
+        for(Cell adjCell : cellList){
+          if(adjCell != null && isPassable(adjCell)){
+            graph.addTwoWayEdge(currentNode, adjCell.cellToNode());
+          }
+        }
+      }
+    }
+  }
+
+  private boolean isPassable(Cell cell){
+    return cell.getTerrain() != Terrain.NONE && cell.getTerrain() != Terrain.ROCK;
+  }
+
+  private Graph testGraph(){
+    Graph graph = new Graph();
+
+    Node n17 = new Node(1,7, Terrain.SOIL, Science.NONE, false);
+    Node n18 = new Node(1,8, Terrain.SOIL, Science.NONE, false);
+    Node n27 = new Node(2,7, Terrain.SOIL, Science.NONE, false);
+    Node n28 = new Node(2,8, Terrain.SOIL, Science.NONE, false);
+    Node n37 = new Node(3,7, Terrain.SOIL, Science.NONE, false);
+    Node n38 = new Node(3,8, Terrain.SOIL, Science.NONE, false);
+    Node n19 = new Node(1,9, Terrain.SOIL, Science.NONE, false);
+    Node n29 = new Node(2,9, Terrain.SOIL, Science.NONE, false);
+    Node n39 = new Node(3,9, Terrain.SOIL, Science.NONE, false);
+
+    graph.addTwoWayEdge(n17, n18);
+    graph.addTwoWayEdge(n18, n19);
+    graph.addTwoWayEdge(n17, n27);
+    graph.addTwoWayEdge(n27, n28);
+    graph.addTwoWayEdge(n28, n29);
+    graph.addTwoWayEdge(n18, n28);
+    graph.addTwoWayEdge(n19, n29);
+    graph.addTwoWayEdge(n27, n37);
+    graph.addTwoWayEdge(n37, n38);
+    graph.addTwoWayEdge(n28, n38);
+    graph.addTwoWayEdge(n38, n39);
+    graph.addTwoWayEdge(n29, n39);
+    return graph;
   }
 }
