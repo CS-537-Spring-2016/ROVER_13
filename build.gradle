@@ -1,24 +1,42 @@
 // Apply the java plugin to add support for Java
-apply plugin: 'java'
-apply plugin: 'eclipse'
+plugins {
+  id "java"
+  id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
 
 sourceCompatibility = 1.8
 version = '1.0'
 
 sourceSets {
-    main {
-        java {
-            srcDir 'src/'
-        }
+  main {
+    java {
+      srcDir 'src/'
     }
+  }
+//  test {
+//    java {
+//      srcDir 'test/'
+//    }
+//  }
 }
 
 
-// In this section you declare where to find the dependencies of your project
 repositories {
-    // Use 'jcenter' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     jcenter()
+}
+
+jar {
+  manifest {
+     attributes 'Main-Class': 'swarmBots.ROVER_13'
+  }
+  // from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+shadowJar {
+    baseName = 'ROVER_13'
+    version = '1.0-SNAPSHOT'
+    archiveName = "${baseName}.jar"
 }
 
 // In this section you declare the dependencies for your production and test code
@@ -39,7 +57,7 @@ test {
 
 task rover(type: JavaExec){
   classpath = sourceSets.main.runtimeClasspath
-  main = 'bot.Rover'
+  main = 'swarmBots.ROVER_13'
 }
 
 task sampleRover(type: JavaExec){
