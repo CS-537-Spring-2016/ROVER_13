@@ -120,11 +120,11 @@ public class Rover {
   private Cell closestOrganic(List<Cell> organics){
     // FIXME: how to deal when we get an empty list?
     AStar aStar = new AStar();
+    Node current = new Node(currentLocation.getX(), currentLocation.getY());
     int minDistance = Integer.MAX_VALUE;
     Cell closest = null;
     for(Cell organic : organics){
-      int distance = aStar.minDistance(graph, new Node(currentLocation.getX(), currentLocation.getY()),
-              organic.cellToNode());
+      int distance = aStar.minDistance(graph, current, organic.cellToNode());
       if(distance < minDistance){
         closest = organic;
         minDistance = distance;
