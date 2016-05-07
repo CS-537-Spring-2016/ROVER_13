@@ -163,7 +163,8 @@ public class Rover {
         // TODO
         // send response to map builder
         /*
-        Collection<Cell> cells = converter.convert(response);
+        CellScanner cellScanner = new CellScanner();
+        List<Cell> cells = cellScanner.convertToCells(response);
         addToCellMap(cells);
         updateGraph(cellMap);
          */
@@ -218,6 +219,8 @@ public class Rover {
   }
 
   private boolean isPassable(Cell cell){
+    // HARDCODED for our bot
+    //TODO: let this logic depend on the type of rover
     return cell.getTerrain() != Terrain.NONE && cell.getTerrain() != Terrain.ROCK;
   }
 
