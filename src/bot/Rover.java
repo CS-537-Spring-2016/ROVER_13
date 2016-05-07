@@ -106,10 +106,31 @@ public class Rover {
 
   private void makeBestMove(){
     // decide what direction to move in
+    List<Cell> organics = cellMap.getOrganicCells();
+    Cell organic = closestOrganic(organics);
+    if(organic == null){
+      // FIXME check for this
+    }
     Direction direction = strategy.bestMove(graph,
             new Node(currentLocation.getX(), currentLocation.getY()),
             new Node(3,9, Terrain.SOIL, Science.NONE, false));
     move(direction);
+  }
+
+  private Cell closestOrganic(List<Cell> organics){
+    // FIXME: how to deal when we get an empty list?
+    AStar aStar = new AStar();
+    int minDistance = Integer.MAX_VALUE;
+    Cell closest = null;
+    for(Cell organic : organics){
+      int distance = aStar.minDistance(graph, new Node(currentLocation.getX(), currentLocation.getY()),
+              organic.cellToNode());
+      if(distance < minDistance){
+        closest = organic;
+        minDistance = distance;
+      }
+    }
+    return closest;
   }
 
   private void move(Direction direction){
