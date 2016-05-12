@@ -28,7 +28,4 @@ public void setYpos(int y) {
 	}
 }
 
-
-
-
 }
