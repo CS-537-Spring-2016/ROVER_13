@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class CellMap {
   private Map<Location, Cell> cellMap;
-  // possible optimization to use 1 object for key and just update x and y
+  // possible optimization to use 1 object for key and just update x and 
 
   public CellMap(){
     this.cellMap = new HashMap<>();
