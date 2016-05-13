@@ -4,6 +4,7 @@ import bot.graph.Graph;
 import bot.graph.Node;
 import bot.graph.search.AStar;
 import bot.location.Location;
+import enums.Terrain;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -43,15 +44,18 @@ public class ExploreStrategy implements Strategy {
   }
 
   public Direction bestMove(Graph map, Node start, Set<Location> visited) {
+    System.out.println("\n NEW GRAPH ");
+    for(Node node : map.getNodes()){
+      System.out.println(node);
+    }
     if(roverStuck(start)){
-      return randomMove();
+      return shortestPath(map, start, randomPreviousVisited(visited));
     }
     if(target != null && !visited.contains(new Location(target.getX(), target.getY()))){
       return shortestPath(map, start, target);
     }
 
-
-    List<Node> potentialNodes = dfs(map, start);
+    List<Node> potentialNodes = bfs(map, start);
     Location location;
     for(Node node : potentialNodes){
       location = new Location(node.getX(), node.getY());
@@ -61,25 +65,39 @@ public class ExploreStrategy implements Strategy {
     }
 
     if(queue.size() < 1){
-      return randomMove();
+      return shortestPath(map, start, randomPreviousVisited(visited));
     }
+
     target = queue.remove();
     Location nextLoc = new Location(target.getX(), target.getY());
     while(queue.size() > 0 && visited.contains(nextLoc)){
       target = queue.remove();
     }
     logger.info("next target to move to: " + target);
-    shortestPath(map, start, target);
-    return randomMove();
+    return shortestPath(map, start, target);
   }
 
   private Direction shortestPath(Graph graph, Node start, Node end){
     AStar aStar = new AStar();
+    logger.info("shortest path from: " + start + " to " + end);
     List<Node> nodes = aStar.search(graph, start, end);
     Node nextBestNode;
     if(nodes.size() > 0){
       nextBestNode = nodes.get(0);
       return moveFromTo(start, nextBestNode);
+    }
+    // random adjacent
+    List<Node> adjacentNodes = new ArrayList<>();
+    for(Node node : graph.neighbors(start)){
+      if(node.getTerrain() != Terrain.NONE && node.getTerrain() != Terrain.ROCK){
+        adjacentNodes.add(node);
+      }
+    }
+    if(adjacentNodes.size() > 0){
+      int choice = rng.nextInt(adjacentNodes.size());
+      Node next = adjacentNodes.get(choice);
+      logger.info("moving to a random adjacent to: " + next);
+      return moveFromTo(start, next);
     }
     return randomMove();
   }
@@ -100,6 +118,30 @@ public class ExploreStrategy implements Strategy {
           stack.push(adj);
         }
       }
+    }
+    return result;
+  }
+
+  private List<Node> bfs(Graph graph, Node source){
+    int numNodes = graph.getNodes().size();
+    List<Node> result = new ArrayList<>(numNodes);
+    Deque<Node> queue = new ArrayDeque<>();
+    Set<Node> bfsVisit = new HashSet<>(numNodes);
+    queue.add(source);
+    while(queue.size() > 0){
+      Deque<Node> frontier = new ArrayDeque<>();
+      for(Node node : queue){
+        if(!bfsVisit.contains(node)){
+          for(Node adj : graph.neighbors(node)){
+            if(!bfsVisit.contains(adj)){
+              frontier.add(adj);
+            }
+          }
+          bfsVisit.add(node);
+          result.add(node);
+        }
+      }
+      queue = frontier;
     }
     return result;
   }
@@ -127,7 +169,22 @@ public class ExploreStrategy implements Strategy {
   private Direction randomMove() {
     Direction[] directions = Direction.values();
     int choice = rng.nextInt(directions.length);
-    return directions[choice];
+    Direction direction = directions[choice];
+    logger.info("randomly moving to: " + direction);
+    return direction;
+  }
+
+  private Node randomPreviousVisited(Set<Location> visited) {
+    int choice = rng.nextInt(visited.size());
+    Iterator<Location> it = visited.iterator();
+    Location loc = it.next();
+    for(int i = 1; i < choice; i++){
+      if(it.hasNext()){
+        loc = it.next();
+      }
+    }
+    Node node = new Node(loc.getX(), loc.getY());
+    return node;
   }
 
   private int updatePosition(Node start){
