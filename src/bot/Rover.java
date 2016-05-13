@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +32,7 @@ public class Rover {
   private int SERVER_PORT;
   private int sleepTime;
   private CellMap cellMap;
+  private Set<Location> visited;
   private Graph graph;
   private Location currentLocation;
 
@@ -55,6 +54,7 @@ public class Rover {
     sleepTime = 1200;
     strategy = new ShortestPathStrategy();
     cellMap = new CellMap();
+    visited = new HashSet<>();
     graph = testGraph();
   }
 
@@ -146,6 +146,7 @@ public class Rover {
     return false;
   }
 
+
   private String requestLocation(){
     out.println("LOC");
     String response = "";
@@ -164,6 +165,7 @@ public class Rover {
     int x = Integer.parseInt(tokens[1]);
     int y = Integer.parseInt(tokens[2]);
     Location loc = new Location(x,y);
+    visited.add(loc);
     return loc;
   }
 
