@@ -6,14 +6,18 @@ import bot.graph.search.AStar;
 import bot.location.Location;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by tj on 4/19/16.
  */
 public class ExploreStrategy implements Strategy {
-
+  public static final Logger logger = Logger.getLogger(ExploreStrategy.class.getName());
   private Random rng;
   private Deque<Node> queue;
+  private Node target;
+  private Node lastPosition;
+  private int lastPositionCounter;
 
   public ExploreStrategy() {
     rng = new Random();
@@ -39,16 +43,39 @@ public class ExploreStrategy implements Strategy {
   }
 
   public Direction bestMove(Graph map, Node start, Set<Location> visited) {
+    if(roverStuck(start)){
+      return randomMove();
+    }
+    if(target != null && !visited.contains(new Location(target.getX(), target.getY()))){
+      return shortestPath(map, start, target);
+    }
+
+
     List<Node> potentialNodes = dfs(map, start);
+    Location location;
     for(Node node : potentialNodes){
-      if(!visited.contains(node)){
+      location = new Location(node.getX(), node.getY());
+      if(!visited.contains(location)){
         queue.add(node);
       }
     }
 
-    Node next = queue.remove();
+    if(queue.size() < 1){
+      return randomMove();
+    }
+    target = queue.remove();
+    Location nextLoc = new Location(target.getX(), target.getY());
+    while(queue.size() > 0 && visited.contains(nextLoc)){
+      target = queue.remove();
+    }
+    logger.info("next target to move to: " + target);
+    shortestPath(map, start, target);
+    return randomMove();
+  }
+
+  private Direction shortestPath(Graph graph, Node start, Node end){
     AStar aStar = new AStar();
-    List<Node> nodes = aStar.search(map, start, next);
+    List<Node> nodes = aStar.search(graph, start, end);
     Node nextBestNode;
     if(nodes.size() > 0){
       nextBestNode = nodes.get(0);
@@ -101,5 +128,20 @@ public class ExploreStrategy implements Strategy {
     Direction[] directions = Direction.values();
     int choice = rng.nextInt(directions.length);
     return directions[choice];
+  }
+
+  private int updatePosition(Node start){
+    if(lastPosition == null || !lastPosition.equals(start)){
+      lastPosition = start;
+      lastPositionCounter = 1;
+    } else{
+      lastPositionCounter++;
+    }
+    return lastPositionCounter;
+  }
+
+  private boolean roverStuck(Node start){
+    int turnsInSameSpot = updatePosition(start);
+    return turnsInSameSpot > 4;
   }
 }

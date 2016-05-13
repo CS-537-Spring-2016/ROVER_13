@@ -7,10 +7,7 @@ import bot.location.Cell;
 import bot.location.CellMap;
 import bot.location.CellScanner;
 import bot.location.Location;
-import bot.movement.Direction;
-import bot.movement.RandomStrategy;
-import bot.movement.ShortestPathStrategy;
-import bot.movement.Strategy;
+import bot.movement.*;
 import bot.schedule.Scheduler;
 import enums.Science;
 import enums.Terrain;
@@ -55,7 +52,7 @@ public class Rover {
     SERVER_PORT = 9537;
     // FIXME: implement class to cover the sleep time
     sleepTime = 1200;
-    strategy = new ShortestPathStrategy();
+    strategy = new ExploreStrategy();
     cellMap = new CellMap();
     visited = new HashSet<>();
     graph = new Graph();//testGraph();
@@ -229,7 +226,7 @@ public class Rover {
 
   public void updateGraph(CellMap cellMap){
     // cells to skip: Terrain.ROCK, Terrain.NONE
-    Graph graph = new Graph();
+    graph = new Graph();
     for(Cell cell : cellMap.getCells()){
       Node currentNode = cell.cellToNode();
       if(isPassable(cell)){
