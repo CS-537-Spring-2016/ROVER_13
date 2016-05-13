@@ -44,10 +44,6 @@ public class ExploreStrategy implements Strategy {
   }
 
   public Direction bestMove(Graph map, Node start, Set<Location> visited) {
-    System.out.println("\n NEW GRAPH ");
-    for(Node node : map.getNodes()){
-      System.out.println(node);
-    }
     if(roverStuck(start)){
       return shortestPath(map, start, randomPreviousVisited(visited));
     }

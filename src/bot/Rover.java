@@ -192,11 +192,6 @@ public class Rover {
 
         CellScanner cellScanner = new CellScanner();
         List<Cell> cells = cellScanner.convertToCells(response);
-        System.out.println("\n RESPONSE " + response);
-        System.out.println("\n CELL START");
-        for(Cell c : cells){
-          System.out.println(c);
-        }
         addToCellMap(cells);
         updateGraph(cellMap);
       }
