@@ -33,6 +33,16 @@ public class Cell {
     this.science = science;
     this.hasRover = hasRover;
   }
+
+  // Constructor for setting Terrain, science and occupied position
+  public Cell(int x, int y, Terrain terrain, Science science, boolean hasRover) {
+    this.xPosition = x;
+    this.yPosition = y;
+    this.terrain = terrain;
+    this.science = science;
+    this.hasRover = hasRover;
+  }
+
   // getters
   // we will not create any setters for security reasons. Attributes can be
   // set using construcors if needed
@@ -58,6 +68,12 @@ public class Cell {
 
   public Node cellToNode(){
     return new Node(xPosition, yPosition, terrain, science, hasRover);
+  }
+
+  @Override
+  public String toString(){
+    return String.format("{x: %d, y: %d, terrain:%s, science:%s, hasRover:%b}", xPosition, yPosition,
+            terrain, science, hasRover);
   }
 
 
