@@ -11,6 +11,7 @@ import bot.movement.Direction;
 import bot.movement.RandomStrategy;
 import bot.movement.ShortestPathStrategy;
 import bot.movement.Strategy;
+import bot.schedule.Scheduler;
 import enums.Science;
 import enums.Terrain;
 
@@ -36,6 +37,7 @@ public class Rover {
   private Set<Location> visited;
   private Graph graph;
   private Location currentLocation;
+  private Scheduler scheduler;
 
   private BufferedReader in;
   private PrintWriter out;
@@ -56,7 +58,8 @@ public class Rover {
     strategy = new ShortestPathStrategy();
     cellMap = new CellMap();
     visited = new HashSet<>();
-    graph = testGraph();
+    graph = new Graph();//testGraph();
+    scheduler = new Scheduler();
   }
 
   public void run(){
@@ -92,17 +95,19 @@ public class Rover {
       */
       waitUntilReady();
       makeBestMove();
+      scheduler.logLastMove();
       //
     }
 
   }
 
   private void waitUntilReady(){
-    try{
-      Thread.sleep(sleepTime);
-    } catch(InterruptedException ex){
-      ex.printStackTrace();
-    }
+    scheduler.scheduleNextMoveReady();
+//    try{
+//      Thread.sleep(sleepTime);
+//    } catch(InterruptedException ex){
+//      ex.printStackTrace();
+//    }
   }
 
   private void makeBestMove(){

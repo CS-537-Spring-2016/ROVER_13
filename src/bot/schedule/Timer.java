@@ -19,7 +19,7 @@ public class Timer {
   public long stop(){
     stopTime = System.currentTimeMillis();
     difference = stopTime - startTime;
-    System.out.println("ElapsedTime: " +difference);
+
     return difference;
   }
 
