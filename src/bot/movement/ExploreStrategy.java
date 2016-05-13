@@ -55,7 +55,7 @@ public class ExploreStrategy implements Strategy {
       return shortestPath(map, start, target);
     }
 
-    List<Node> potentialNodes = bfs(map, start);
+    List<Node> potentialNodes = dfs(map, start);
     Location location;
     for(Node node : potentialNodes){
       location = new Location(node.getX(), node.getY());
