@@ -16,10 +16,6 @@ public class CellScanner {
 
   public List<Cell> convertToCells(String jsonScanMap){
     List<Cell> cells = new ArrayList<>();
-    /*
-    TODO: implement logic to create valid cells here
-
-     */
     Gson gson = new GsonBuilder().create();
     ScanMap scanMap = gson.fromJson(jsonScanMap, ScanMap.class);
     MapTile[][] tiles = scanMap.getScanMap();
@@ -39,7 +35,6 @@ public class CellScanner {
         cells.add(currentCell);
       }
     }
-    System.out.printf("CENTER POINT: x:%d y:%d%n%n", x, y);
     return cells;
   }
 }
