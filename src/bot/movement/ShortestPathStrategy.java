@@ -3,9 +3,11 @@ package bot.movement;
 import bot.graph.Graph;
 import bot.graph.Node;
 import bot.graph.search.AStar;
+import bot.location.Location;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by tj on 4/19/16.
@@ -33,6 +35,10 @@ public class ShortestPathStrategy implements Strategy {
       nextBestNode = nodes.get(0);
       return moveFromTo(start, nextBestNode);
     }
+    return randomMove();
+  }
+
+  public Direction bestMove(Graph map, Node start, Set<Location> visited){
     return randomMove();
   }
 

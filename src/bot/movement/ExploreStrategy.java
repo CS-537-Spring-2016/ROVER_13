@@ -3,9 +3,9 @@ package bot.movement;
 import bot.graph.Graph;
 import bot.graph.Node;
 import bot.graph.search.AStar;
+import bot.location.Location;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by tj on 4/19/16.
@@ -13,9 +13,11 @@ import java.util.Random;
 public class ExploreStrategy implements Strategy {
 
   private Random rng;
+  private Deque<Node> queue;
 
   public ExploreStrategy() {
     rng = new Random();
+    queue = new ArrayDeque<>();
   }
 
   public Direction bestMove() {
@@ -34,6 +36,45 @@ public class ExploreStrategy implements Strategy {
       return moveFromTo(start, nextBestNode);
     }
     return randomMove();
+  }
+
+  public Direction bestMove(Graph map, Node start, Set<Location> visited) {
+    List<Node> potentialNodes = dfs(map, start);
+    for(Node node : potentialNodes){
+      if(!visited.contains(node)){
+        queue.add(node);
+      }
+    }
+
+    Node next = queue.remove();
+    AStar aStar = new AStar();
+    List<Node> nodes = aStar.search(map, start, next);
+    Node nextBestNode;
+    if(nodes.size() > 0){
+      nextBestNode = nodes.get(0);
+      return moveFromTo(start, nextBestNode);
+    }
+    return randomMove();
+  }
+
+  private List<Node> dfs(Graph graph, Node source){
+    int numNodes = graph.getNodes().size();
+    List<Node> result = new ArrayList<>(numNodes);
+    Deque<Node> stack = new ArrayDeque<>();
+    Set<Node> dfsVisit = new HashSet<>(numNodes);
+    Node current = source;
+    stack.push(current);
+    while(stack.size() > 0){
+      current = stack.pop();
+      result.add(current);
+      dfsVisit.add(current);
+      for(Node adj : graph.neighbors(current)){
+        if(!dfsVisit.contains(adj)){
+          stack.push(adj);
+        }
+      }
+    }
+    return result;
   }
 
   // precondition: from and to must be adjacent; otherwise, throw illegalarugmentexception

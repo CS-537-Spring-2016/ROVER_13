@@ -5,6 +5,7 @@ import bot.graph.Node;
 import bot.graph.search.AStar;
 import bot.location.Cell;
 import bot.location.CellMap;
+import bot.location.CellScanner;
 import bot.location.Location;
 import bot.movement.Direction;
 import bot.movement.RandomStrategy;
@@ -106,14 +107,15 @@ public class Rover {
 
   private void makeBestMove(){
     // decide what direction to move in
-    List<Cell> organics = cellMap.getOrganicCells();
-    Cell organic = closestOrganic(organics);
-    if(organic == null){
-      // FIXME check for this
-    }
-    Direction direction = strategy.bestMove(graph,
-            new Node(currentLocation.getX(), currentLocation.getY()),
-            new Node(3,9, Terrain.SOIL, Science.NONE, false));
+//    List<Cell> organics = cellMap.getOrganicCells();
+//    Cell organic = closestOrganic(organics);
+//    if(organic == null){
+//      // FIXME check for this
+//    }
+//    Direction direction = strategy.bestMove(graph,
+//            new Node(currentLocation.getX(), currentLocation.getY()),
+//            new Node(3,9, Terrain.SOIL, Science.NONE, false));
+    Direction direction = strategy.bestMove(graph, new Node(currentLocation.getX(), currentLocation.getY()), visited);
     move(direction);
   }
 
@@ -185,12 +187,11 @@ public class Rover {
         response = sb.toString();
         // TODO
         // send response to map builder
-        /*
+
         CellScanner cellScanner = new CellScanner();
         List<Cell> cells = cellScanner.convertToCells(response);
         addToCellMap(cells);
         updateGraph(cellMap);
-         */
       }
       // parse the response into an object
       // use the object to build a new map/graph
