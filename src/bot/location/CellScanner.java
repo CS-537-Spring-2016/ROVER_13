@@ -24,15 +24,21 @@ public class CellScanner {
     Coord center = scanMap.getCenterPoint();
     int x = center.xpos;
     int y = center.ypos;
+    int cellX;
+    int cellY;
     MapTile currentTile;
     Cell currentCell;
     for(int row = 0; row < tiles.length; row++){
       for(int col = 0; col < tiles.length; col++){
+        cellX = col - offSet + x;
+        cellY = row - offSet + y;
         currentTile = tiles[row][col];
-        currentCell = new Cell(col - offSet + x, row - offSet + y, currentTile.getTerrain(),
-                currentTile.getScience(), currentTile.getHasRover()
-        );
-        cells.add(currentCell);
+        if(cellX >= 0 && cellY >= 0){
+          currentCell = new Cell(cellX, cellY, currentTile.getTerrain(),
+                  currentTile.getScience(), currentTile.getHasRover()
+          );
+          cells.add(currentCell);
+        }
       }
     }
     return cells;
