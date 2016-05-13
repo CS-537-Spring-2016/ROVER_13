@@ -61,4 +61,8 @@ public class ScanMap {
 	public int getEdgeSize(){
 		return edgeSize;
 	}
+
+	public Coord getCenterPoint(){
+		return centerPoint;
+	}
 }
