@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import common.Coord;
 import common.MapTile;
 import common.ScanMap;
+import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,14 @@ public class CellScanner {
         }
       }
     }
+    return cells;
+  }
+
+  public List<Cell> convertServerCells(JSONArray json){
+    List<Cell> cells = new ArrayList<>();
+    /*
+      TODO: implement
+     */
     return cells;
   }
 }
