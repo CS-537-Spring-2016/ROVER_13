@@ -1,17 +1,17 @@
 package bot.location;
 
 import bot.movement.Direction;
+import enums.Science;
+import enums.Terrain;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tj on 5/1/16.
  */
 public class CellMap {
   private Map<Location, Cell> cellMap;
-  // possible optimization to use 1 object for key and just update x and y
+  // possible optimization to use 1 object for key and just update  x and y
 
   public CellMap(){
     this.cellMap = new HashMap<>();
@@ -69,4 +69,15 @@ public class CellMap {
   private Cell updateCell(Location key, Cell cell){
     return cellMap.put(key, cell);
   }
+
+  public List<Cell> getOrganicCells(){
+    List<Cell> organics = new ArrayList<>();
+    for(Cell cell : cellMap.values()){
+      if(cell.getScience().equals(Science.ORGANIC)){
+        organics.add(cell);
+      }
+    }
+    return organics;
+  }
+
 }

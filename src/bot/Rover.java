@@ -5,11 +5,10 @@ import bot.graph.Node;
 import bot.graph.search.AStar;
 import bot.location.Cell;
 import bot.location.CellMap;
+import bot.location.CellScanner;
 import bot.location.Location;
-import bot.movement.Direction;
-import bot.movement.RandomStrategy;
-import bot.movement.ShortestPathStrategy;
-import bot.movement.Strategy;
+import bot.movement.*;
+import bot.schedule.Scheduler;
 import enums.Science;
 import enums.Terrain;
 
@@ -19,9 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,8 +31,10 @@ public class Rover {
   private int SERVER_PORT;
   private int sleepTime;
   private CellMap cellMap;
+  private Set<Location> visited;
   private Graph graph;
   private Location currentLocation;
+  private Scheduler scheduler;
 
   private BufferedReader in;
   private PrintWriter out;
@@ -53,9 +52,11 @@ public class Rover {
     SERVER_PORT = 9537;
     // FIXME: implement class to cover the sleep time
     sleepTime = 1200;
-    strategy = new ShortestPathStrategy();
+    strategy = new ExploreStrategy();
     cellMap = new CellMap();
-    graph = testGraph();
+    visited = new HashSet<>();
+    graph = new Graph();//testGraph();
+    scheduler = new Scheduler();
   }
 
   public void run(){
@@ -91,25 +92,49 @@ public class Rover {
       */
       waitUntilReady();
       makeBestMove();
+      scheduler.logLastMove();
       //
     }
 
   }
 
   private void waitUntilReady(){
-    try{
-      Thread.sleep(sleepTime);
-    } catch(InterruptedException ex){
-      ex.printStackTrace();
-    }
+    scheduler.scheduleNextMoveReady();
+//    try{
+//      Thread.sleep(sleepTime);
+//    } catch(InterruptedException ex){
+//      ex.printStackTrace();
+//    }
   }
 
   private void makeBestMove(){
     // decide what direction to move in
-    Direction direction = strategy.bestMove(graph,
-            new Node(currentLocation.getX(), currentLocation.getY()),
-            new Node(3,9, Terrain.SOIL, Science.NONE, false));
+//    List<Cell> organics = cellMap.getOrganicCells();
+//    Cell organic = closestOrganic(organics);
+//    if(organic == null){
+//      // FIXME check for this
+//    }
+//    Direction direction = strategy.bestMove(graph,
+//            new Node(currentLocation.getX(), currentLocation.getY()),
+//            new Node(3,9, Terrain.SOIL, Science.NONE, false));
+    Direction direction = strategy.bestMove(graph, new Node(currentLocation.getX(), currentLocation.getY()), visited);
     move(direction);
+  }
+
+  private Cell closestOrganic(List<Cell> organics){
+    // FIXME: how to deal when we get an empty list?
+    AStar aStar = new AStar();
+    Node current = new Node(currentLocation.getX(), currentLocation.getY());
+    int minDistance = Integer.MAX_VALUE;
+    Cell closest = null;
+    for(Cell organic : organics){
+      int distance = aStar.minDistance(graph, current, organic.cellToNode());
+      if(distance < minDistance){
+        closest = organic;
+        minDistance = distance;
+      }
+    }
+    return closest;
   }
 
   private void move(Direction direction){
@@ -124,6 +149,7 @@ public class Rover {
     // default to false for now
     return false;
   }
+
 
   private String requestLocation(){
     out.println("LOC");
@@ -143,6 +169,7 @@ public class Rover {
     int x = Integer.parseInt(tokens[1]);
     int y = Integer.parseInt(tokens[2]);
     Location loc = new Location(x,y);
+    visited.add(loc);
     return loc;
   }
 
@@ -162,11 +189,11 @@ public class Rover {
         response = sb.toString();
         // TODO
         // send response to map builder
-        /*
-        Collection<Cell> cells = converter.convert(response);
+
+        CellScanner cellScanner = new CellScanner();
+        List<Cell> cells = cellScanner.convertToCells(response);
         addToCellMap(cells);
         updateGraph(cellMap);
-         */
       }
       // parse the response into an object
       // use the object to build a new map/graph
@@ -199,7 +226,7 @@ public class Rover {
 
   public void updateGraph(CellMap cellMap){
     // cells to skip: Terrain.ROCK, Terrain.NONE
-    Graph graph = new Graph();
+    graph = new Graph();
     for(Cell cell : cellMap.getCells()){
       Node currentNode = cell.cellToNode();
       if(isPassable(cell)){
@@ -218,6 +245,8 @@ public class Rover {
   }
 
   private boolean isPassable(Cell cell){
+    // HARDCODED for our bot
+    //TODO: let this logic depend on the type of rover
     return cell.getTerrain() != Terrain.NONE && cell.getTerrain() != Terrain.ROCK;
   }
 
