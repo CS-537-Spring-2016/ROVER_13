@@ -31,7 +31,6 @@ private int y;
     return this.x == other.x && this.y == other.y;
   }
 
-<<<<<<< HEAD
   @Override
   public int hashCode(){
     int result = 17;
@@ -40,6 +39,4 @@ private int y;
     return result;
   }
 
-=======
->>>>>>> 29449d94c7c4ab428ecda8d2a8ff046cb57a2e77
 }
