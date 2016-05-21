@@ -71,6 +71,7 @@ public class Rover {
   public void run(){
 
     try{
+      logger.info("connecting to: " + SERVER_ADDRESS);
       Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       out = new PrintWriter(socket.getOutputStream(), true);
