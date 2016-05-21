@@ -291,20 +291,20 @@ public class Rover {
   }
 
   private void messageServer(String response){
-    Gson gson = new GsonBuilder().create();
-    ScanMap scanMap = gson.fromJson(response, ScanMap.class);
-    MapTile[][] tiles = scanMap.getScanMap();
-    Location location = updateLocation(response);
-    Coord coordinates = new Coord(location.getX(), location.getY());
-    communication.postScanMapTiles(coordinates, tiles);
+//    Gson gson = new GsonBuilder().create();
+//    ScanMap scanMap = gson.fromJson(response, ScanMap.class);
+//    MapTile[][] tiles = scanMap.getScanMap();
+//    Location location = updateLocation(response);
+//    Coord coordinates = new Coord(location.getX(), location.getY());
+//    communication.postScanMapTiles(coordinates, tiles);
   }
 
   private void getUpdateFromServer(){
-    JSONArray response = communication.getGlobalMap();
+//    JSONArray response = communication.getGlobalMap();
 
-    CellScanner cellScanner = new CellScanner();
-    List<Cell> cells = cellScanner.convertServerCells(response);
-    addToCellMap(cells);
-    updateGraph(cellMap);
+//    CellScanner cellScanner = new CellScanner();
+//    List<Cell> cells = cellScanner.convertServerCells(response);
+//    addToCellMap(cells);
+//    updateGraph(cellMap);
   }
 }
