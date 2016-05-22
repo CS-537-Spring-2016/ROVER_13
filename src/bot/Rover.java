@@ -9,8 +9,15 @@ import bot.location.CellScanner;
 import bot.location.Location;
 import bot.movement.*;
 import bot.schedule.Scheduler;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import common.Communication;
+import common.Coord;
+import common.MapTile;
+import common.ScanMap;
 import enums.Science;
 import enums.Terrain;
+import org.json.simple.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -35,7 +42,8 @@ public class Rover {
   private Graph graph;
   private Location currentLocation;
   private Scheduler scheduler;
-
+  private String url;
+  private Communication communication;
   private BufferedReader in;
   private PrintWriter out;
 
@@ -57,10 +65,13 @@ public class Rover {
     visited = new HashSet<>();
     graph = new Graph();//testGraph();
     scheduler = new Scheduler();
+    url = "http://23.251.155.186:3000/api/global";
   }
 
   public void run(){
+
     try{
+      logger.info("connecting to: " + SERVER_ADDRESS);
       Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       out = new PrintWriter(socket.getOutputStream(), true);
@@ -82,10 +93,14 @@ public class Rover {
 
     // rover is alive and communication
     logger.log(Level.INFO, "rover_13 is up");
+    communication = new Communication(url);
+    String lastResponse;
     while(true){
       // TODO do interesting rover things
       requestLocation();
-      scan();
+      lastResponse = scan();
+      messageServer(lastResponse);
+      getUpdateFromServer();
       gather();// because, why not?
       /*
       logic for MOVE, GATHER
@@ -173,7 +188,7 @@ public class Rover {
     return loc;
   }
 
-  private boolean scan(){
+  private String scan(){
     // TODO
     out.println("SCAN");
     String response = "";
@@ -197,12 +212,10 @@ public class Rover {
       }
       // parse the response into an object
       // use the object to build a new map/graph
-      return true;
     } catch(IOException ex){
       System.err.println("exception reading outputstream during scan " + ex);
-      return false;
     }
-
+    return response;
   }
 
   private void serverHandshake() throws IOException{
@@ -276,5 +289,23 @@ public class Rover {
     graph.addTwoWayEdge(n38, n39);
     graph.addTwoWayEdge(n29, n39);
     return graph;
+  }
+
+  private void messageServer(String response){
+//    Gson gson = new GsonBuilder().create();
+//    ScanMap scanMap = gson.fromJson(response, ScanMap.class);
+//    MapTile[][] tiles = scanMap.getScanMap();
+//    Location location = updateLocation(response);
+//    Coord coordinates = new Coord(location.getX(), location.getY());
+//    communication.postScanMapTiles(coordinates, tiles);
+  }
+
+  private void getUpdateFromServer(){
+//    JSONArray response = communication.getGlobalMap();
+
+//    CellScanner cellScanner = new CellScanner();
+//    List<Cell> cells = cellScanner.convertServerCells(response);
+//    addToCellMap(cells);
+//    updateGraph(cellMap);
   }
 }
