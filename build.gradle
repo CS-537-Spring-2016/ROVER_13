@@ -63,7 +63,7 @@ task rover(type: JavaExec){
 task roverNetwork(type: JavaExec){
     classpath = sourceSets.main.runtimeClasspath
     main = 'swarmBots.ROVER_13'
-    args project.getProperty("host");
+//    args project.getProperty("host");
 }
 
 task sampleRover(type: JavaExec){

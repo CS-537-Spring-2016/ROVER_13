@@ -48,8 +48,9 @@ public class Rover {
   private PrintWriter out;
 
   // knowledge
+  private CollectScienceStrategy collectStrategy;
   private Strategy strategy;
-
+  private String corp_secret = "0FSj7Pn23t";
   public Rover() {
     this("localhost");
   }
@@ -61,11 +62,12 @@ public class Rover {
     // FIXME: implement class to cover the sleep time
     sleepTime = 1200;
     strategy = new ExploreStrategy();
+    collectStrategy = new CollectScienceStrategy();
     cellMap = new CellMap();
     visited = new HashSet<>();
     graph = new Graph();//testGraph();
     scheduler = new Scheduler();
-    url = "http://23.251.155.186:3000/api/global";
+    url = "http://23.251.155.186:3000/api";
   }
 
   public void run(){
@@ -93,7 +95,7 @@ public class Rover {
 
     // rover is alive and communication
     logger.log(Level.INFO, "rover_13 is up");
-    communication = new Communication(url);
+    communication = new Communication(url, "ROVER_13",corp_secret);
     String lastResponse;
     while(true){
       // TODO do interesting rover things
@@ -125,14 +127,21 @@ public class Rover {
   private void makeBestMove(){
     // decide what direction to move in
 //    List<Cell> organics = cellMap.getOrganicCells();
-//    Cell organic = closestOrganic(organics);
-//    if(organic == null){
-//      // FIXME check for this
-//    }
-//    Direction direction = strategy.bestMove(graph,
-//            new Node(currentLocation.getX(), currentLocation.getY()),
-//            new Node(3,9, Terrain.SOIL, Science.NONE, false));
-    Direction direction = strategy.bestMove(graph, new Node(currentLocation.getX(), currentLocation.getY()), visited);
+    List<Cell> science = cellMap.getExcavableScienceCells();
+    Cell organic = closestOrganic(science);
+    Direction direction;
+    if(organic != null){
+      logger.info("found science: heading to it");
+//      direction = collectStrategy.bestMove(graph,
+//        new Node(currentLocation.getX(), currentLocation.getY()),
+//        organic.cellToNode());
+      direction = collectStrategy.bestMove(graph,
+              new Node(currentLocation.getX(), currentLocation.getY()),
+              organic.cellToNode(),
+              visited);
+    } else {
+      direction = strategy.bestMove(graph, new Node(currentLocation.getX(), currentLocation.getY()), visited);
+    }
     move(direction);
   }
 
@@ -292,18 +301,15 @@ public class Rover {
   }
 
   private void messageServer(String response){
-//    Gson gson = new GsonBuilder().create();
-//    ScanMap scanMap = gson.fromJson(response, ScanMap.class);
-//    MapTile[][] tiles = scanMap.getScanMap();
-//    Location location = updateLocation(response);
-//    Coord coordinates = new Coord(location.getX(), location.getY());
-//    communication.postScanMapTiles(coordinates, tiles);
+    Gson gson = new GsonBuilder().create();
+    ScanMap scanMap = gson.fromJson(response, ScanMap.class);
+    MapTile[][] tiles = scanMap.getScanMap();
+    communication.postScanMapTiles(scanMap.getCenterPoint(), tiles);
   }
 
   private void getUpdateFromServer(){
-//    JSONArray response = communication.getGlobalMap();
-
-//    CellScanner cellScanner = new CellScanner();
+    JSONArray response = communication.getGlobalMap();
+    CellScanner cellScanner = new CellScanner();
 //    List<Cell> cells = cellScanner.convertServerCells(response);
 //    addToCellMap(cells);
 //    updateGraph(cellMap);
