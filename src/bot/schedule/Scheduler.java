@@ -15,9 +15,9 @@ public class Scheduler {
   }
 
   public void scheduleNextMoveReady(){
-    long error = 50;
+    long error = 25;
     long elapsed = timer.stop();
-    long cooldown = 1200L;
+    long cooldown = 700L;
     long remaining = cooldown - elapsed;
     if(remaining + error > 0){
       try {
