@@ -135,6 +135,7 @@ public class Rover {
 //      direction = collectStrategy.bestMove(graph,
 //        new Node(currentLocation.getX(), currentLocation.getY()),
 //        organic.cellToNode());
+      logger.info("Heading to a science cell: " + organic.toString());
       direction = collectStrategy.bestMove(graph,
               new Node(currentLocation.getX(), currentLocation.getY()),
               organic.cellToNode(),
