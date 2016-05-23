@@ -54,7 +54,17 @@ public class ExploreStrategy implements Strategy {
 
   public Direction bestMove(Graph map, Node start, Set<Location> visited) {
     if(roverStuck(start)){
-      return shortestPath(map, start, randomPreviousVisited(visited));
+      try{
+        logger.warning("stuck, trying to move around");
+        List<Node> nodes = new AStar().search(map, start, target);
+        map.removeNode(nodes.get(0));
+        nodes = new AStar().search(map, start, target);
+        return shortestPath(map, start, target);
+      } catch(Exception ex){
+        return shortestPath(map, start, randomPreviousVisited(visited));
+      }
+
+
     }
     if(target != null && !visited.contains(new Location(target.getX(), target.getY()))){
       return shortestPath(map, start, target);
