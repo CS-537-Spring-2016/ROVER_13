@@ -50,7 +50,16 @@ public class CollectScienceStrategy {
       // pick a new target from the old path
       // create a path to the new target
       // replace the path with the new path
-      return shortestPath(map, start, randomPreviousVisited(visited));
+      if(roverStuck(start)){
+        try{
+          logger.warning("stuck, trying to move around");
+          List<Node> nodes = new AStar().search(map, start, target);
+          map.removeNode(nodes.get(0));
+          return shortestPath(map, start, target);
+        } catch(Exception ex){
+          return shortestPath(map, start, randomPreviousVisited(visited));
+        }
+      }
     }
 
     // check if we have a path to travel still
@@ -72,6 +81,7 @@ public class CollectScienceStrategy {
       }
 
     } else {
+      // see if there are any targets
       List<Node> nodes  = new AStar().search(map, start, target);
       this.target = target;
       path = new ArrayDeque<>();
