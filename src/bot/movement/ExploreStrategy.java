@@ -15,14 +15,23 @@ import java.util.logging.Logger;
 public class ExploreStrategy implements Strategy {
   public static final Logger logger = Logger.getLogger(ExploreStrategy.class.getName());
   private Random rng;
-  private Deque<Node> queue;
+  private PriorityQueue<Node> queue;
   private Node target;
   private Node lastPosition;
   private int lastPositionCounter;
 
   public ExploreStrategy() {
     rng = new Random();
-    queue = new ArrayDeque<>();
+    queue = new PriorityQueue<>(new Comparator<Node>() {
+      @Override
+      public int compare(Node thisNode, Node thatNode){
+        int thisX = thisNode.getX();
+        int thisY = thisNode.getY();
+        int thatX = thatNode.getX();
+        int thatY = thatNode.getY();
+        return (int) (Math.sqrt(thatX*thatX + thatY*thatY) - Math.sqrt(thisX*thisX + thisY*thisY));
+      }
+    });
   }
 
   public Direction bestMove() {
@@ -51,7 +60,7 @@ public class ExploreStrategy implements Strategy {
       return shortestPath(map, start, target);
     }
 
-    List<Node> potentialNodes = dfs(map, start);
+    List<Node> potentialNodes = bfs(map, start);
     Location location;
     for(Node node : potentialNodes){
       location = new Location(node.getX(), node.getY());
@@ -68,7 +77,11 @@ public class ExploreStrategy implements Strategy {
     Location nextLoc = new Location(target.getX(), target.getY());
     while(queue.size() > 0 && visited.contains(nextLoc)){
       target = queue.remove();
+      nextLoc = new Location(target.getX(), target.getY());
     }
+    logger.info("queue has number of elements: " + queue.size());
+    logger.info("visited size: " + visited.size());
+    logger.info("graph nodes size: " + map.getNodes().size());
     logger.info("next target to move to: " + target);
     return shortestPath(map, start, target);
   }
