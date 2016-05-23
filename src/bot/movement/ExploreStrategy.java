@@ -218,6 +218,6 @@ public class ExploreStrategy implements Strategy {
 
   private boolean roverStuck(Node start){
     int turnsInSameSpot = updatePosition(start);
-    return turnsInSameSpot > 4;
+    return turnsInSameSpot > 3;
   }
 }

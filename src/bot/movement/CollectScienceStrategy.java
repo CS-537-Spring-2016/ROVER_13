@@ -173,6 +173,6 @@ public class CollectScienceStrategy {
 
   private boolean roverStuck(Node start){
     int turnsInSameSpot = updatePosition(start);
-    return turnsInSameSpot > 4;
+    return turnsInSameSpot > 3;
   }
 }
