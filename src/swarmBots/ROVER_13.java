@@ -36,7 +36,14 @@ public class ROVER_13 {
 	}
 		
 		
-		
+	//Constructor with server address 
+	public ROVER_13(String serverAdress){
+		rovername = "ROVER_13";
+		SERVER_ADDRESS = serverAdress;
+		sleepTime=300;
+		globalMap = new HashMap<>();
+		destinations = new ArrayList<>();
+	}
 	
 	
   public static void main(String[] args){
