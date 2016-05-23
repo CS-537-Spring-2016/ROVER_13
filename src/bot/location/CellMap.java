@@ -83,9 +83,6 @@ public class CellMap {
   public List<Cell> getExcavableScienceCells(){
     List<Cell> science = new ArrayList<>();
     for(Cell cell : cellMap.values()){
-      if(!cell.getScience().equals(Science.NONE)){
-        System.out.println("FOUND SCIENCE: " + cell);
-      }
       if(!cell.getScience().equals(Science.NONE) &&
               (cell.getTerrain().equals(Terrain.SOIL) || cell.getTerrain().equals(Terrain.SAND) ) ){
         science.add(cell);

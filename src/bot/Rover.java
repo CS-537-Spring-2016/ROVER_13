@@ -18,6 +18,7 @@ import common.ScanMap;
 import enums.Science;
 import enums.Terrain;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -131,7 +132,6 @@ public class Rover {
     Cell organic = closestOrganic(science);
     Direction direction;
     if(organic != null){
-      logger.info("found science: heading to it");
 //      direction = collectStrategy.bestMove(graph,
 //        new Node(currentLocation.getX(), currentLocation.getY()),
 //        organic.cellToNode());
@@ -310,8 +310,27 @@ public class Rover {
   private void getUpdateFromServer(){
     JSONArray response = communication.getGlobalMap();
     CellScanner cellScanner = new CellScanner();
-//    List<Cell> cells = cellScanner.convertServerCells(response);
-//    addToCellMap(cells);
-//    updateGraph(cellMap);
+    Collection<Cell> cells = cellResponse(response);
+    addToCellMap(cells);
+    updateGraph(cellMap);
   }
+
+  private Collection<Cell> cellResponse(JSONArray response){
+    List<Cell> cells = new ArrayList<>(response.size());
+    Cell currentCell;
+    JSONObject jsonObj;
+    for(Object obj : response.toArray()){
+      jsonObj = (JSONObject) obj;
+      int x = (int)(long)jsonObj.get("x");
+      int y = (int)(long)jsonObj.get("y");
+      Science science =  Science.valueOf(jsonObj.get("science").toString().toUpperCase());
+      Terrain terrain = Terrain.valueOf(jsonObj.get("terrain").toString().toUpperCase());
+      if(x >= 0 && y >= 0 && !terrain.equals(Terrain.NONE)){
+        currentCell = new Cell(x, y, terrain, science, false);
+        cells.add(currentCell);
+      }
+    }
+    return cells;
+  }
+
 }
