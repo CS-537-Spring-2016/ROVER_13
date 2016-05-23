@@ -84,7 +84,9 @@ public class CellMap {
     List<Cell> science = new ArrayList<>();
     for(Cell cell : cellMap.values()){
       if(!cell.getScience().equals(Science.NONE) &&
-              (cell.getTerrain().equals(Terrain.SOIL) || cell.getTerrain().equals(Terrain.SAND) ) ){
+              (cell.getTerrain().equals(Terrain.SOIL) ||
+                      cell.getTerrain().equals(Terrain.SAND) ||
+                      cell.getTerrain().equals(Terrain.GRAVEL) ) ){
         science.add(cell);
       }
     }
