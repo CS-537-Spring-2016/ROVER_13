@@ -37,7 +37,7 @@ public class Rover {
   private String roverName;
   private String SERVER_ADDRESS;
   private int SERVER_PORT;
-  private int sleepTime;
+  private long stepCount;
   private CellMap cellMap;
   private Set<Location> visited;
   private Graph graph;
@@ -61,7 +61,6 @@ public class Rover {
     SERVER_ADDRESS = serverAddress;
     SERVER_PORT = 9537;
     // FIXME: implement class to cover the sleep time
-    sleepTime = 1200;
     strategy = new ExploreStrategy();
     collectStrategy = new CollectScienceStrategy();
     cellMap = new CellMap();
@@ -111,6 +110,7 @@ public class Rover {
       waitUntilReady();
       makeBestMove();
       scheduler.logLastMove();
+      stepCount++;
       //
     }
 
@@ -308,11 +308,16 @@ public class Rover {
   }
 
   private void getUpdateFromServer(){
-    JSONArray response = communication.getGlobalMap();
-    CellScanner cellScanner = new CellScanner();
-    Collection<Cell> cells = cellResponse(response);
-    addToCellMap(cells);
-    updateGraph(cellMap);
+    if(stepCount % 5 == 0){
+      logger.info("requesting global map");
+      JSONArray response = communication.getGlobalMap();
+      CellScanner cellScanner = new CellScanner();
+      Collection<Cell> cells = cellResponse(response);
+      logger.info("global map returned " + cells.size() + " cells");
+      addToCellMap(cells);
+      updateGraph(cellMap);
+    }
+
   }
 
   private Collection<Cell> cellResponse(JSONArray response){
