@@ -7,6 +7,8 @@ import common.ScanMap;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -24,13 +26,18 @@ public class ROVER_13 {
 	List<Coord> destinations;
 	long counter;//for controlling the traffic
 	
+	//default constructor
 	public ROVER_13(){
-		jbhjbhdb
-		
-		
-		
-		
+		rovername = "ROVER_13";
+		SERVER_ADDRESS = "localhost";
+		sleepTime=300;
+		globalMap = new HashMap<>();
+		destinations = new ArrayList<>();
 	}
+		
+		
+		
+	
 	
   public static void main(String[] args){
    
