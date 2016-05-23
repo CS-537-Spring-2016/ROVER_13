@@ -49,7 +49,6 @@ public class SearchLogic {
 				if (!closed.contains(new Node(c, 0)) && globalMap.get(c) != null
 						&& validateTile(globalMap.get(c), drive)) {
 
-					// TODO: MAYBE: assess cost depending on the tile's terrain,
 					// science, etc
 					double g = u.getData() + 1; // each move cost is 1, for now
 					double h = getDistance(c, dest); // distance from neighbor
@@ -100,7 +99,6 @@ public class SearchLogic {
 					mindist = distance;
 					backTrack = n;
 				}
-
 			}
 		}
 

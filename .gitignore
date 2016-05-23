@@ -1,6 +1,6 @@
 # Ignore everything
 *
-*.class
+/bin/
 # But not these files...
 !.gitignore
 
