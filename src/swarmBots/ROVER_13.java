@@ -29,7 +29,7 @@ import bot.SearchLogic;
 import supportTools.CommunicationHelper;
 
 public class ROVER_13 {
-
+	
 	BufferedReader in;
 	PrintWriter out;
 	String rovername;
@@ -77,7 +77,6 @@ public class ROVER_13 {
 		out = new PrintWriter(socket.getOutputStream(), true);
 
 		// Process all messages from server, wait until server requests Rover ID
-
 		while (true) {
 			String line = in.readLine();
 			if (line.startsWith("SUBMITNAME")) {
@@ -277,20 +276,7 @@ public class ROVER_13 {
 			if (line.startsWith("LOC")) {
 				currentLoc = extractLocation(line);
 			}
-
-			// System.out.println("ROVER_13 currentLoc after recheck: " +
-			// currentLoc);
-			// System.out.println("ROVER_13 previousLoc: " + previousLoc);
-
-			// test for stuckness
 			stuck = currentLoc.equals(previousLoc);
-			// if (stuck){
-			// destination = destinations.poll();
-			// }
-			// System.out.println("ROVER_13 stuck test " + stuck);
-			// System.out.println(rovername + " blocked test " + blocked);
-
-
 			Thread.sleep(sleepTime);
 
 			System.out.println(rovername + " ------------ bottom process control --------------");
@@ -359,7 +345,7 @@ public class ROVER_13 {
 		}
 	}
 
-	// ################ Support Methods ###########################
+	/*---------------------------------------------Support Methods ----------------------------------------*/
 
 	private void clearReadLineBuffer() throws IOException {
 		while (in.ready()) {
