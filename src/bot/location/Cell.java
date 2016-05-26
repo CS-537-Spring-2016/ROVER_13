@@ -8,8 +8,8 @@ public class Cell {
 
   public int xPosition;
   public int yPosition;
-  private Terrain terrain;
-  private Science science;
+  private Terrain terrain;//Type of terrain for eg Rock or sand
+  private Science science;//for eg. minerals
 
   // For occupied status we will use hasRover boolean attribute
   private boolean hasRover;

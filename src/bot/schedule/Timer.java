@@ -1,40 +1,44 @@
 package bot.schedule;
 
 /**
- * Created by tj on 5/7/16.
- * base provided by mitali
+ * Created by mitali on 5/7/16
+ */
+/*
+ * This class will tell the running time in milliseconds of any function by
+ * using two functions that are start() and stop()
  */
 public class Timer {
 
-  //start time and endtime attributes
-  long startTime;
-  long stopTime;
-  long difference;
+	// start time and endtime attributes
+	long startTime;
+	long stopTime;
+	long difference;
 
-  //start function to record the current time in milliseconds
-  public void start(){
-    startTime = System.currentTimeMillis();
-  }
-  //returns the difference in milliseconds that have elapsed since last start call
-  public long stop(){
-    stopTime = System.currentTimeMillis();
-    difference = stopTime - startTime;
+	// start function to record the current time in milliseconds
+	public void start() {
+		startTime = System.currentTimeMillis();
+	}
 
-    return difference;
-  }
+	// returns the difference in milliseconds that have elapsed since last start
+	// call
+	public long stop() {
+		stopTime = System.currentTimeMillis();
+		difference = stopTime - startTime;
 
-  //getters only
-  public long getStartTime() {
-    return startTime;
-  }
-  public long getStopTime() {
-    return stopTime;
-  }
-  public long getDifference() {
-    return difference;
-  }
+		return difference;
+	}
 
+	// getters only
+	public long getStartTime() {
+		return startTime;
+	}
 
+	public long getStopTime() {
+		return stopTime;
+	}
 
+	public long getDifference() {
+		return difference;
+	}
 
 }
