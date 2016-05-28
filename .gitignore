@@ -1,3 +1,16 @@
+
+!libs
+!libs/
+!libs/*
+!libs/*/
+!libs/*/*
+!libs/**
+
+!*.txt
+!*.md
+
+!build.gradle
+=======
 # Ignore everything
 *
 
@@ -25,3 +38,4 @@
 !*.md
 
 !build.gradle
+>>>>>>> d3cad0f82c9b5f5be29484bc169f2e73a3b82d41
